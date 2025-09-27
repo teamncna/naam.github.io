@@ -1,0 +1,11 @@
+<!--
+* NCNA Address book
+* Copyright 2015 Nagappan Alagappan
+* Version 0.0.1
+*
+--><!DOCTYPE html> <html ng-app="ncna"> <head> <meta charset="utf-8"> <meta name="viewport" content="width=device-width,initial-scale=1"> <!-- Page title set in pageTitle directive --> <title page-title></title> <!-- Google Open Sans --> <link href="//fonts.googleapis.com/css?family=Open+Sans:400,300,600,700" rel="stylesheet" type="text/css"> <link rel="stylesheet" href="styles/vendor.7b62b563.css"> <link rel="stylesheet" href="styles/style.9ca11a23.css"> <style>.odd {
+            background-color: #FFF;
+        }
+        .even {
+            background-color: #B0E0E6;
+        }</style>  <!-- ControllerAs syntax --> <!-- Main controller with serveral data used in NCNA theme on different view --> <body ng-controller="MainCtrl as main"> <!-- Main view  --> <div ui-view autoscroll></div> <script src="scripts/vendor.9111d681.js"></script> <script src="scripts/scripts.d83f4370.js"></script>  

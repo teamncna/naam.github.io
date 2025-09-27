@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Login — NAAM</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <style>
+      /* In styles.css or inside your <style> block */
+      html,
+      .login-page {
+        min-height: 100vh; /* ensures it always fills the viewport */
+        display: flex;
+        align-items: center; /* optional, centers content vertically */
+        justify-content: center; /* optional, centers content horizontally */
+        background: linear-gradient(
+            rgba(15, 23, 36, 0.65),
+            rgba(15, 23, 36, 0.65)
+          ),
+          url("assets/bg-image.jpeg") center / cover no-repeat;
+      }
+    </style>
+  </head>
+  <body>
+    <main class="container center-content login-page">
+      <div class="hero-card login-card">
+        <h1 class="hero-title">Welcome to NCNA</h1>
+        <p class="lead hero-lead">Please sign in with Google to continue.</p>
+        <p class="lead hero-lead small-note">
+          IMPORTANT: If your email is not approved as a NCNA member, you will
+          not be allowed in. Please contact an admin or Pillayar Nombu organizer
+          to get access.
+        </p>
+
+        <!-- Google Sign-In Button -->
+        <div class="google-login">
+          <div
+            id="g_id_onload"
+            data-client_id="677414762046-dnsp2rk6k3bvvhubt0bhimemfrvcei28.apps.googleusercontent.com"
+            data-callback="handleGoogleLogin"
+            data-auto_prompt="true"
+          ></div>
+          <div class="g_id_signin" data-type="standard" data-size="large"></div>
+        </div>
+
+        <p id="loginMsg" class="muted small login-msg"></p>
+      </div>
+    </main>
+
+    <script>
+      const BACKEND = "https://namma-ooru-backend.onrender.com";
+
+      async function handleGoogleLogin(response) {
+        const msg = document.getElementById("loginMsg");
+        msg.textContent = "Verifying your account...";
+        try {
+          const res = await fetch(`${BACKEND}/web/auth/google`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ token: response.credential }),
+          });
+          const data = await res.json();
+
+          if (data.ok) {
+            localStorage.setItem("userId", data.userId);
+            localStorage.setItem("userEmail", data.email);
+            localStorage.setItem("userName", data.name);
+            msg.textContent = "Login successful! Redirecting...";
+            msg.style.color = "var(--green)";
+            setTimeout(() => (location.href = "members.html"), 500);
+          } else {
+            msg.textContent = data.message || "Login failed.";
+            msg.style.color = "var(--danger)";
+          }
+        } catch (err) {
+          console.error(err);
+          msg.textContent = "Network error logging in.";
+          msg.style.color = "var(--danger)";
+        }
+      }
+    </script>
+  </body>
+</html>
+

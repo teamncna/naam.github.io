@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Categories — NAAM</title>
+    <script src="common.js"></script>
+    <script>
+      requireLogin();
+    </script>
+    <style>
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui,
+          sans-serif;
+        background: #f8fafc;
+        color: #1f2937;
+        line-height: 1.5;
+        margin: 0;
+        padding: 0;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+
+      .site-header {
+        background: #fff;
+        border-bottom: 1px solid #e5e7eb;
+        padding: 16px 0;
+      }
+
+      .header-inner {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .brand {
+        font-size: 24px;
+        font-weight: bold;
+        color: #1f2937;
+        text-decoration: none;
+      }
+
+      .nav {
+        display: flex;
+        gap: 20px;
+      }
+
+      .nav a {
+        text-decoration: none;
+        color: #6b7280;
+        font-weight: 500;
+        padding: 8px 0;
+        border-bottom: 2px solid transparent;
+        transition: all 0.2s ease;
+      }
+
+      .nav a:hover,
+      .nav a.active {
+        color: #1f2937;
+        border-bottom-color: #4f46e5;
+      }
+
+      h2 {
+        margin-bottom: 16px;
+      }
+
+      .filters {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin-bottom: 20px;
+        align-items: center;
+      }
+
+      select,
+      input[type="text"] {
+        padding: 8px 12px;
+        border-radius: 8px;
+        border: 1px solid #d1d5db;
+        font-size: 14px;
+        outline: none;
+      }
+
+      select:focus,
+      input:focus {
+        border-color: #4f46e5;
+        box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.2);
+      }
+
+      .members-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 16px;
+      }
+
+      .member-card {
+        background: #fff;
+        border-radius: 12px;
+        padding: 16px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        transition: transform 0.2s ease;
+      }
+
+      .member-card:hover {
+        transform: translateY(-2px);
+      }
+
+      .member-card img {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid #e5e7eb;
+        margin-bottom: 8px;
+      }
+
+      .member-card h3 {
+        font-size: 16px;
+        margin: 4px 0;
+        font-weight: 600;
+      }
+
+      .member-card .muted {
+        font-size: 14px;
+        color: #6b7280;
+      }
+
+      .loading,
+      .error,
+      .empty {
+        padding: 40px 0;
+        text-align: center;
+        color: #6b7280;
+        font-size: 16px;
+      }
+
+      .error {
+        color: #dc2626;
+      }
+
+      .site-footer {
+        text-align: center;
+        padding: 20px 0;
+        font-size: 14px;
+        color: #6b7280;
+        border-top: 1px solid #e5e7eb;
+      }
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a href="members.html" class="brand"
+          >NAAM <span class="muted">— Browse Members</span></a
+        >
+        <nav class="nav">
+          <a href="members.html">Members</a>
+          <a href="analytics.html">Analytics</a>
+          <a href="profile.html">Profile</a>
+          <a href="browse_by_category.html" class="active">By Category</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container page-content">
+      <h2>Browse by Category</h2>
+
+      <div class="filters">
+        <select id="categorySelect">
+          <option value="">Select category</option>
+          <option value="City">City</option>
+          <option value="Chettinad native place">Native Village</option>
+          <option value="Kovil">Kovil</option>
+          <option value="YearSince">Year Since</option>
+        </select>
+
+        <select id="subCategorySelect" disabled>
+          <option value="">Select subcategory</option>
+        </select>
+
+        <input
+          type="text"
+          id="searchInput"
+          placeholder="Search by name or email"
+        />
+      </div>
+
+      <div id="membersContainer" class="members-grid">
+        <div class="loading">Loading members…</div>
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container"><small>© NAAM</small></div>
+    </footer>
+
+    <script>
+      const BACKEND = "https://namma-ooru-backend.onrender.com";
+      const membersContainer = document.getElementById("membersContainer");
+      const categorySelect = document.getElementById("categorySelect");
+      const subCategorySelect = document.getElementById("subCategorySelect");
+      const searchInput = document.getElementById("searchInput");
+
+      let allMembers = [];
+
+      async function loadMembers() {
+        membersContainer.innerHTML =
+          '<div class="loading">Loading members…</div>';
+        try {
+          const res = await fetch(`${BACKEND}/members?limit=1000`);
+          if (!res.ok) throw new Error("Failed to fetch members");
+          allMembers = await res.json();
+          renderMembers(allMembers);
+        } catch (err) {
+          console.error(err);
+          membersContainer.innerHTML =
+            '<div class="error">Could not load members.</div>';
+        }
+      }
+
+      function renderMembers(members) {
+        if (!members.length) {
+          membersContainer.innerHTML =
+            '<div class="empty">No members found.</div>';
+          return;
+        }
+
+        membersContainer.innerHTML = members
+          .map((m) => {
+            const fullname =
+              `${m["First name"] || ""} ${m["Last name"] || ""}`.trim() ||
+              "Unnamed";
+            const spouseName = `${m["Spouse first name"] || ""} ${
+              m["Spouse last name"] || ""
+            }`.trim();
+            const displayName = spouseName
+              ? `${fullname} & ${spouseName}`
+              : fullname;
+
+            const photoUrl = m.photo_link
+              ? `${PHOTO_BASE_URL}${m.photo_link}`
+              : "assets/default-profile.jpeg";
+
+            // Make the whole card clickable
+            return `
+        <a href="member.html?id=${encodeURIComponent(
+          m._id
+        )}" style="text-decoration: none; color: inherit;">
+          <div class="member-card">
+            <img src="${photoUrl}" onerror="this.src='assets/default-profile.jpeg'" />
+            <h3>${escapeHtml(displayName)}</h3>
+            <div class="muted">${escapeHtml(m.Email || "")}</div>
+          </div>
+        </a>
+      `;
+          })
+          .join("");
+      }
+
+      function escapeHtml(s) {
+        return String(s || "").replace(
+          /[&<>"]/g,
+          (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c])
+        );
+      }
+
+      // Populate subcategories dynamically
+      const CATEGORY_MAP = {
+        City: "city", // maps to /stats/city
+        "Chettinad native place": "native-village", // maps to /stats/native-village
+        Kovil: "kovil", // maps to /stats/kovil
+        YearSince: "year", // maps to /stats/year
+      };
+
+      categorySelect.addEventListener("change", async () => {
+        const selectedCategory = categorySelect.value;
+        if (!selectedCategory) {
+          subCategorySelect.innerHTML =
+            '<option value="">Select subcategory</option>';
+          subCategorySelect.disabled = true;
+          renderMembers(allMembers);
+          return;
+        }
+
+        // Fetch unique subcategories from backend
+        try {
+          const apiCategory = CATEGORY_MAP[selectedCategory];
+          const res = await fetch(`${BACKEND}/stats/${apiCategory}`);
+
+          const stats = await res.json();
+          const uniqueValues = stats
+            .map((item) => item._id)
+            .filter(Boolean)
+            .sort();
+
+          subCategorySelect.innerHTML =
+            '<option value="">Select subcategory</option>' +
+            uniqueValues
+              .map((v) => `<option value="${v}">${v}</option>`)
+              .join("");
+
+          subCategorySelect.disabled = false;
+          filterMembers();
+        } catch (err) {
+          console.error("Failed to fetch subcategories", err);
+          subCategorySelect.innerHTML =
+            '<option value="">Error loading</option>';
+          subCategorySelect.disabled = true;
+        }
+      });
+
+      async function filterMembers() {
+        const cat = categorySelect.value;
+        const sub = subCategorySelect.value;
+        const search = searchInput.value.trim();
+
+        if (!cat || !sub) {
+          renderMembers([]);
+          return;
+        }
+
+        const apiCategory = CATEGORY_MAP[cat];
+        try {
+          const url = new URL(`${BACKEND}/members/by-category`);
+          url.searchParams.append("category", apiCategory);
+          url.searchParams.append("value", sub);
+          if (search) url.searchParams.append("search", search);
+
+          const res = await fetch(url);
+          const members = await res.json();
+          renderMembers(members);
+        } catch (err) {
+          console.error("Failed to fetch members by category", err);
+          membersContainer.innerHTML =
+            '<div class="error">Failed to load members</div>';
+        }
+      }
+
+      subCategorySelect.addEventListener("change", filterMembers);
+      searchInput.addEventListener("input", filterMembers);
+
+      function filterMembers() {
+        const category = categorySelect.value;
+        const subCategory = subCategorySelect.value.toLowerCase();
+        const search = searchInput.value.toLowerCase();
+
+        const filtered = allMembers.filter((m) => {
+          let matchesCategory = true;
+          if (category && subCategory) {
+            matchesCategory = (m[category] || "").toLowerCase() === subCategory;
+          }
+
+          let matchesSearch = true;
+          if (search) {
+            const fullName = `${m["First name"] || ""} ${
+              m["Last name"] || ""
+            }`.toLowerCase();
+            const email = (m.Email || "").toLowerCase();
+            matchesSearch = fullName.includes(search) || email.includes(search);
+          }
+
+          return matchesCategory && matchesSearch;
+        });
+
+        renderMembers(filtered);
+      }
+
+      loadMembers();
+    </script>
+  </body>
+</html>

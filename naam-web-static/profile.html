@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>My Profile — NAAM</title>
+    <style>
+      /* Basic page styles to make it look good */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui,
+          sans-serif;
+        background: #f8fafc;
+        color: #1f2937;
+        line-height: 1.5;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+      }
+
+      .site-header {
+        background: #ffffff;
+        border-bottom: 1px solid #e5e7eb;
+        padding: 16px 0;
+      }
+
+      .header-inner {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .brand {
+        font-size: 24px;
+        font-weight: bold;
+        color: #1f2937;
+        text-decoration: none;
+      }
+
+      .muted {
+        color: #6b7280;
+        font-weight: normal;
+      }
+
+      .nav {
+        display: flex;
+        gap: 24px;
+        align-items: center;
+      }
+
+      .nav a {
+        text-decoration: none;
+        color: #6b7280;
+        font-weight: 500;
+        padding: 8px 0;
+        border-bottom: 2px solid transparent;
+        transition: all 0.2s ease;
+      }
+
+      .nav a:hover,
+      .nav a.active {
+        color: #1f2937;
+        border-bottom-color: #4f46e5;
+      }
+
+      .page-content {
+        padding: 40px 0;
+      }
+
+      .panel {
+        background: #ffffff;
+        border-radius: 12px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+      }
+
+      .profile-card {
+        background: #ffffff;
+        border-radius: 12px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        padding: 24px;
+        margin-bottom: 24px;
+      }
+
+      .profile-top {
+        display: flex;
+        align-items: center;
+        gap: 24px;
+        margin-bottom: 32px;
+        padding-bottom: 24px;
+        border-bottom: 1px solid #e5e7eb;
+      }
+
+      .profile-photo {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 3px solid #e5e7eb;
+      }
+
+      .profile-meta h2 {
+        font-size: 24px;
+        font-weight: 600;
+        color: #1f2937;
+        margin-bottom: 4px;
+      }
+
+      .profile-meta h3 {
+        font-size: 20px;
+        font-weight: 600;
+        color: #1f2937;
+        margin-bottom: 20px;
+      }
+
+      .profile-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+        margin-bottom: 32px;
+      }
+
+      .profile-grid > div {
+        padding: 16px;
+        background: #f9fafb;
+        border-radius: 8px;
+        border: 1px solid #f3f4f6;
+      }
+
+      .profile-grid strong {
+        display: block;
+        color: #374151;
+        font-weight: 600;
+        margin-bottom: 4px;
+        font-size: 14px;
+        text-transform: capitalize;
+      }
+
+      .profile-grid > div > div {
+        color: #1f2937;
+        font-weight: 500;
+      }
+
+      .profile-actions {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+
+      /* Form styles for edit mode */
+      .profile-grid label {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .profile-grid label span {
+        color: #374151;
+        font-weight: 600;
+        font-size: 14px;
+        text-transform: capitalize;
+      }
+
+      .profile-grid input {
+        padding: 12px;
+        border: 2px solid #e1e5e9;
+        border-radius: 8px;
+        font-size: 14px;
+        transition: all 0.2s ease;
+        outline: none;
+      }
+
+      .profile-grid input:focus {
+        border-color: #4f46e5;
+        box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+      }
+
+      .profile-grid input:hover:not(:focus) {
+        border-color: #d1d5db;
+      }
+
+      .btn {
+        padding: 12px 20px;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: 500;
+        text-decoration: none;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border: none;
+      }
+
+      .btn {
+        background: #4f46e5;
+        color: white;
+      }
+
+      .btn:hover {
+        background: #4338ca;
+        transform: translateY(-1px);
+      }
+
+      .btn.outline {
+        background: transparent;
+        color: #4f46e5;
+        border: 2px solid #4f46e5;
+      }
+
+      .btn.outline:hover {
+        background: #4f46e5;
+        color: white;
+      }
+
+      .loading,
+      .error,
+      .empty {
+        padding: 40px 24px;
+        text-align: center;
+        color: #6b7280;
+      }
+
+      .error {
+        color: #dc2626;
+      }
+
+      .site-footer {
+        padding: 20px 0;
+        text-align: center;
+        color: #6b7280;
+        font-size: 14px;
+      }
+
+      .small {
+        font-size: 14px;
+      }
+
+      /* Form action buttons */
+      .form-actions {
+        grid-column: 1 / -1;
+        display: flex;
+        gap: 12px;
+        justify-content: flex-start;
+        margin-top: 20px;
+        padding-top: 20px;
+        border-top: 1px solid #e5e7eb;
+      }
+
+      /* Responsive design */
+      @media (max-width: 768px) {
+        .profile-top {
+          flex-direction: column;
+          text-align: center;
+        }
+
+        .profile-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .profile-actions {
+          justify-content: center;
+        }
+
+        .nav {
+          flex-wrap: wrap;
+          gap: 12px;
+        }
+
+        .header-inner {
+          flex-direction: column;
+          gap: 16px;
+          align-items: stretch;
+        }
+      }
+    </style>
+    <script src="common.js"></script>
+    <script>
+      requireLogin();
+    </script>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a href="members.html" class="brand"
+          >NAAM <span class="muted">— My Profile</span></a
+        >
+        <nav class="nav">
+          <a href="members.html">Members</a>
+          <a href="analytics.html">Analytics</a>
+          <a href="profile.html" class="active">Profile</a>
+          <a href="browse_by_category.html">By Category</a>
+
+          <button id="logoutBtn" class="btn outline">Logout</button>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container page-content">
+      <section id="profile" class="profile-card">
+        <div class="loading">Loading profile…</div>
+      </section>
+
+      <section
+        id="editProfileSection"
+        class="profile-card"
+        style="display: none"
+      >
+        <h3>Edit Profile</h3>
+        <form id="editProfileForm" class="profile-grid">
+          <!-- Form fields will be dynamically generated -->
+        </form>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container"><small>© NAAM</small></div>
+    </footer>
+
+    <script>
+      const BACKEND = "https://namma-ooru-backend.onrender.com";
+      const userId = localStorage.getItem("userId");
+      const userName = localStorage.getItem("userName");
+
+      if (!userId) {
+        location.href = "login.html"; // force login if no session
+      }
+
+      const profileEl = document.getElementById("profile");
+      const editSection = document.getElementById("editProfileSection");
+      const editForm = document.getElementById("editProfileForm");
+
+      document.getElementById("logoutBtn").addEventListener("click", () => {
+        localStorage.clear();
+        location.href = "login.html";
+      });
+
+      function getPhotoUrl(photoLink) {
+        if (!photoLink) return "assets/default-profile.jpeg";
+        return `${PHOTO_BASE_URL}${photoLink}`;
+      }
+
+      async function loadProfile() {
+        profileEl.innerHTML = `<div class="loading">Loading profile…</div>`;
+        try {
+          const res = await fetch(
+            `${BACKEND}/web/members/${encodeURIComponent(userId)}`
+          );
+          if (!res.ok) throw new Error("Profile not found");
+          const m = await res.json();
+          renderProfile(m);
+        } catch (err) {
+          console.error(err);
+          profileEl.innerHTML = `<div class="error">Could not load profile.</div>`;
+        }
+      }
+
+      function renderProfile(m) {
+        const fullname = `${m["First name"] || ""} ${
+          m["Last name"] || ""
+        }`.trim();
+        const photoUrl = getPhotoUrl(m.photo_link);
+
+        // Generate field list dynamically
+        const fieldsHtml = Object.keys(m)
+          .filter((key) => key !== "photo_link" && key !== "_id") // hide internal fields
+          .map(
+            (key) => `
+        <div>
+          <strong>${escapeHtml(key)}</strong>
+          <div>${escapeHtml(m[key] || "N/A")}</div>
+        </div>`
+          )
+          .join("");
+
+        profileEl.innerHTML = `
+    <div class="profile-top">
+      <img class="profile-photo" src="${photoUrl}" onerror="this.src='assets/default-profile.jpeg'"/>
+      <div class="profile-meta">
+        <h2>${escapeHtml(fullname || m.Email || "Unnamed")}</h2>
+        <div class="muted">${escapeHtml(m.City || "")}</div>
+      </div>
+    </div>
+
+    <div class="profile-grid">
+      ${fieldsHtml}
+    </div>
+
+    <div class="profile-actions">
+      <button id="editBtn" class="btn outline">Edit Profile</button>
+    </div>
+  `;
+
+        document.getElementById("editBtn").addEventListener("click", () => {
+          renderEditForm(m);
+          editSection.style.display = "block";
+          window.scrollTo({ top: editSection.offsetTop, behavior: "smooth" });
+        });
+      }
+
+      editForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const formData = new FormData(editForm); // Use FormData for file upload
+
+        try {
+          // If a file is selected, upload to Cloudinary first
+          const fileInput = formData.get("photo_file");
+          if (fileInput && fileInput.size > 0) {
+            const cloudData = new FormData();
+            cloudData.append("file", fileInput);
+            cloudData.append("upload_preset", "peopleimages"); // Your Cloudinary preset
+
+            const cloudRes = await fetch(
+              "https://api.cloudinary.com/v1_1/dp9lcdlgk/image/upload",
+              {
+                method: "POST",
+                body: cloudData,
+              }
+            );
+            const cloudJson = await cloudRes.json();
+
+            if (cloudJson.secure_url) {
+              // Extract just the filename/path after the last slash
+              const photoPath = cloudJson.public_id.split("/").pop();
+              formData.set("photo_link", photoPath);
+
+              console.log("Original public_id:", cloudJson.public_id);
+              console.log("Extracted photo_link:", photoPath);
+            } else {
+              alert("Photo upload failed. Profile not updated.");
+              return;
+            }
+          }
+
+          // Convert FormData to JSON for your backend
+          const plainData = {};
+          formData.forEach((v, k) => {
+            if (k !== "photo_file") plainData[k] = v;
+          });
+
+          const res = await fetch(
+            `${BACKEND}/web/members/${encodeURIComponent(userId)}`,
+            {
+              method: "PUT",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(plainData),
+            }
+          );
+          const data = await res.json();
+
+          if (data.ok) {
+            alert("Profile updated!");
+            editSection.style.display = "none";
+            renderProfile(data.member); // re-render profile including new photo
+          } else {
+            alert("Update failed: " + (data.message || "Unknown error"));
+          }
+        } catch (err) {
+          console.error(err);
+          alert("Update failed.");
+        }
+      });
+      function renderEditForm(m) {
+        const fieldsHtml = Object.keys(m)
+          .filter((key) => key !== "photo_link" && key !== "_id")
+          .map(
+            (key) => `
+      <label>
+        <span>${escapeHtml(key)}</span>
+        <input type="text" name="${escapeHtml(key)}" value="${escapeHtml(
+              m[key] || ""
+            )}" />
+      </label>`
+          )
+          .join("");
+        const photoHtml = `
+    <label>
+      <span>Profile Photo</span>
+      <input type="file" name="photo_file" accept="image/*" />
+    </label>
+  `;
+
+        editForm.innerHTML = `
+        ${photoHtml}
+    ${fieldsHtml}
+    <div class="form-actions">
+      <button type="submit" class="btn">Save Changes</button>
+      <button type="button" id="cancelEditBtn" class="btn outline">Cancel</button>
+    </div>
+  `;
+
+        // Hook up cancel button after re-render
+        document
+          .getElementById("cancelEditBtn")
+          .addEventListener("click", () => {
+            editSection.style.display = "none";
+          });
+      }
+
+      // Simple escape function
+      function escapeHtml(s) {
+        return String(s || "").replace(
+          /[&<>"]/g,
+          (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c])
+        );
+      }
+
+      loadProfile();
+    </script>
+  </body>
+</html>
