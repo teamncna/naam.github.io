@@ -234,6 +234,20 @@
         display: block;
         border-radius: 90px; /* match parent */
       }
+      .profile-section {
+        margin-bottom: 40px; /* spacing between sections */
+      }
+
+      .profile-section h3 {
+        font-size: 20px;
+        margin-bottom: 16px;
+        color: #374151;
+        font-weight: 600;
+      }
+
+      .profile-grid {
+        margin-top: 8px;
+      }
     </style>
     <script src="common.js"></script>
     <script>
@@ -302,46 +316,145 @@
         }`.trim();
         const photoUrl = getPhotoUrl(m.photo_link);
 
-        // Dynamically render all fields except internal ones
-        const fieldsHtml = Object.keys(m)
-          .filter((key) => key !== "photo_link" && key !== "_id")
+        const skipFields = new Set([
+          "photo_link",
+          "_id",
+          "VerifiedByUser",
+          "OnlyNameAndEmailOnline",
+          "NoPictureInBook",
+          "2016 lotto list",
+          "AlternateSpouseUserName",
+          "NoPictureOnline",
+          "Publishing Options",
+          "2015_update",
+          "AlternateIdType",
+          "EntireProfileInBook",
+          "AlternateSpousePassword",
+          "AlternatePassword",
+          "Achi_name_first",
+          "Admin Comment",
+          "EntireProfileOnline",
+          "AlternateSpouseIdType",
+          "UserUpdated",
+          "AlternateUserName",
+          "OnlyNameAndEmailInBook",
+          "Palakaram",
+          "AdminUpdated",
+          "Area",
+        ]);
+
+        const prettyNames = {
+          "First name": "First Name",
+          "Last name": "Last Name",
+          "Chettinad native place": "Native Place",
+          YearSince: "Year Since",
+          Phone1: "Primary Phone",
+          "Mobile number": "Mobile Number",
+          "Spouse first name": "Spouse First Name",
+          "Spouse last name": "Spouse Last Name",
+          "Child 1 name": "Child 1",
+          "Child 2 name": "Child 2",
+          "Child 3 name": "Child 3",
+          YearSince: "Year Moved to Bay Area",
+          Pattapeyar: "House Name",
+        };
+
+        // Group keys
+        const basicInfoKeys = ["Email", "City"];
+        const chettinadKeys = [
+          "Chettinad native place",
+          "Vilasam",
+          "spouse birth villasam",
+          "spouse birth vilasam",
+          "Kovil",
+          "Pirivu",
+          "Kovil and Pirivu",
+          "spouse kovil",
+          "spouse native city",
+        ];
+        const contactKeys = ["Phone1", "Mobile number", "Address"];
+        const familyKeys = [
+          "Spouse first name",
+          "Spouse last name",
+          "Child 1 name",
+          "Child 2 name",
+          "Child 3 name",
+        ];
+
+        function buildSection(keys, title) {
+          const sectionHtml = keys
+            .filter((key) => key in m && m[key] && !skipFields.has(key))
+            .map(
+              (key) => `
+        <div>
+          <strong>${escapeHtml(prettyNames[key] || key)}</strong>
+          <div>${escapeHtml(m[key] || "N/A")}</div>
+        </div>`
+            )
+            .join("");
+
+          return sectionHtml
+            ? `<div class="profile-section">
+          <h3>${escapeHtml(title)}</h3>
+          <div class="profile-grid">${sectionHtml}</div>
+        </div>`
+            : "";
+        }
+
+        const groupedKeys = new Set([
+          ...basicInfoKeys,
+          ...chettinadKeys,
+          ...contactKeys,
+          ...familyKeys,
+        ]);
+        const miscHtml = Object.keys(m)
+          .filter((key) => !skipFields.has(key) && !groupedKeys.has(key))
           .map(
             (key) => `
-            <div>
-              <strong>${escapeHtml(key)}</strong>
-              <div>${escapeHtml(m[key] || "N/A")}</div>
-            </div>`
+        <div>
+          <strong>${escapeHtml(prettyNames[key] || key)}</strong>
+          <div>${escapeHtml(m[key] || "N/A")}</div>
+        </div>`
           )
           .join("");
 
         profileEl.innerHTML = `
-          <div class="profile-top">
-            <img class="profile-photo" src="${photoUrl}" onerror="this.src='assets/default-profile.jpeg'"/>
-            <div class="profile-meta">
-              <h2>${escapeHtml(fullname || m.Email || "Unnamed")}</h2>
-              <div class="muted">${escapeHtml(m.City || "")}</div>
-            </div>
-          </div>
+    <div class="profile-top">
+      <img class="profile-photo" src="${photoUrl}" onerror="this.src='assets/default-profile.jpeg'"/>
+      <div class="profile-meta">
+        <h2>${escapeHtml(fullname || m.Email || "Unnamed")}</h2>
+        <div class="muted">${escapeHtml(m.City || "")}</div>
+      </div>
+    </div>
 
-          <div class="profile-grid">
-            ${fieldsHtml}
-          </div>
-          <div class="profile-bottom-photo">
-             <img class="banner-photo" src="${photoUrl}" onerror="this.src='assets/default-profile.jpeg'" />
-          </div>
+    ${buildSection(basicInfoKeys, "Basic Info")}
+    ${buildSection(chettinadKeys, "Chettinad Info")}
+    ${buildSection(contactKeys, "Contact Info")}
+    ${buildSection(familyKeys, "Family")}
+    ${
+      miscHtml
+        ? `<div class="profile-section">
+            <h3>Other Details</h3>
+            <div class="profile-grid">${miscHtml}</div>
+          </div>`
+        : ""
+    }
 
+    <div class="profile-bottom-photo">
+      <img class="banner-photo" src="${photoUrl}" onerror="this.src='assets/default-profile.jpeg'" />
+    </div>
 
-          <div class="profile-actions">
-            <a class="btn" href="members.html">Back to list</a>
-            ${
+    <div class="profile-actions">
+      <a class="btn" href="members.html">Back to list</a>
+      ${
+        m.Email
+          ? `<a class="btn outline" href="mailto:${encodeURIComponent(
               m.Email
-                ? `<a class="btn outline" href="mailto:${encodeURIComponent(
-                    m.Email
-                  )}">Email</a>`
-                : ""
-            }
-          </div>
-        `;
+            )}">Email</a>`
+          : ""
+      }
+    </div>
+  `;
       }
 
       // Simple escape function
