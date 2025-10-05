@@ -53,7 +53,6 @@
       .nav {
         display: flex;
         gap: 24px;
-        align-items: center;
       }
 
       .nav a {
@@ -114,13 +113,6 @@
         margin-bottom: 4px;
       }
 
-      .profile-meta h3 {
-        font-size: 20px;
-        font-weight: 600;
-        color: #1f2937;
-        margin-bottom: 20px;
-      }
-
       .profile-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -153,38 +145,6 @@
         display: flex;
         gap: 12px;
         flex-wrap: wrap;
-      }
-
-      /* Form styles for edit mode */
-      .profile-grid label {
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-      }
-
-      .profile-grid label span {
-        color: #374151;
-        font-weight: 600;
-        font-size: 14px;
-        text-transform: capitalize;
-      }
-
-      .profile-grid input {
-        padding: 12px;
-        border: 2px solid #e1e5e9;
-        border-radius: 8px;
-        font-size: 14px;
-        transition: all 0.2s ease;
-        outline: none;
-      }
-
-      .profile-grid input:focus {
-        border-color: #4f46e5;
-        box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
-      }
-
-      .profile-grid input:hover:not(:focus) {
-        border-color: #d1d5db;
       }
 
       .btn {
@@ -245,17 +205,6 @@
         font-size: 14px;
       }
 
-      /* Form action buttons */
-      .form-actions {
-        grid-column: 1 / -1;
-        display: flex;
-        gap: 12px;
-        justify-content: flex-start;
-        margin-top: 20px;
-        padding-top: 20px;
-        border-top: 1px solid #e5e7eb;
-      }
-
       /* Responsive design */
       @media (max-width: 768px) {
         .profile-top {
@@ -270,17 +219,53 @@
         .profile-actions {
           justify-content: center;
         }
+      }
+      .profile-bottom-photo {
+        margin-top: 40px;
+        width: 100%;
+        overflow: hidden;
+        border-radius: 90px; /* rounded corners */
+      }
 
-        .nav {
-          flex-wrap: wrap;
-          gap: 12px;
-        }
+      .banner-photo {
+        width: 100%;
+        height: 300px; /* adjust height as needed */
+        object-fit: contain;
+        display: block;
+        border-radius: 90px; /* match parent */
+      }
+      .profile-section {
+        margin-bottom: 40px; /* spacing between sections */
+      }
 
-        .header-inner {
-          flex-direction: column;
-          gap: 16px;
-          align-items: stretch;
-        }
+      .profile-section h3 {
+        font-size: 20px;
+        margin-bottom: 16px;
+        color: #374151;
+        font-weight: 600;
+      }
+
+      .profile-grid {
+        margin-top: 8px;
+      }
+
+      /* form styles for edit mode */
+      .edit-input {
+        padding: 10px;
+        border: 2px solid #e1e5e9;
+        border-radius: 8px;
+        font-size: 14px;
+        width: 100%;
+      }
+
+      .form-actions {
+        grid-column: 1 / -1;
+        display: flex;
+        gap: 12px;
+        justify-content: flex-start;
+        margin-top: 20px;
+        padding-top: 20px;
+        border-top: 1px solid #e5e7eb;
       }
     </style>
     <script src="common.js"></script>
@@ -299,8 +284,6 @@
           <a href="analytics.html">Analytics</a>
           <a href="profile.html" class="active">Profile</a>
           <a href="browse_by_category.html">By Category</a>
-
-          <button id="logoutBtn" class="btn outline">Logout</button>
         </nav>
       </div>
     </header>
@@ -309,17 +292,6 @@
       <section id="profile" class="profile-card">
         <div class="loading">Loading profile…</div>
       </section>
-
-      <section
-        id="editProfileSection"
-        class="profile-card"
-        style="display: none"
-      >
-        <h3>Edit Profile</h3>
-        <form id="editProfileForm" class="profile-grid">
-          <!-- Form fields will be dynamically generated -->
-        </form>
-      </section>
     </main>
 
     <footer class="site-footer">
@@ -327,28 +299,96 @@
     </footer>
 
     <script>
+      // Backend base
       const BACKEND = "https://namma-ooru-backend-q34n.onrender.com";
       const userId = localStorage.getItem("userId");
-      const userName = localStorage.getItem("userName");
-
       if (!userId) {
-        location.href = "login.html"; // force login if no session
+        location.href = "login.html";
       }
 
       const profileEl = document.getElementById("profile");
-      const editSection = document.getElementById("editProfileSection");
-      const editForm = document.getElementById("editProfileForm");
 
-      document.getElementById("logoutBtn").addEventListener("click", () => {
-        localStorage.clear();
-        location.href = "login.html";
-      });
+      // Keep same skipFields & prettyNames as your member page
+      const skipFields = new Set([
+        "photo_link",
+        "_id",
+        "VerifiedByUser",
+        "OnlyNameAndEmailOnline",
+        "NoPictureInBook",
+        "2016 lotto list",
+        "AlternateSpouseUserName",
+        "NoPictureOnline",
+        "Publishing Options",
+        "2015_update",
+        "AlternateIdType",
+        "EntireProfileInBook",
+        "AlternateSpousePassword",
+        "AlternatePassword",
+        "Achi_name_first",
+        "Admin Comment",
+        "EntireProfileOnline",
+        "AlternateSpouseIdType",
+        "UserUpdated",
+        "AlternateUserName",
+        "OnlyNameAndEmailInBook",
+        "Palakaram",
+        "AdminUpdated",
+        "Area",
+      ]);
 
+      const prettyNames = {
+        "First name": "First Name",
+        "Last name": "Last Name",
+        "Chettinad native place": "Native Place",
+        YearSince: "Year Since",
+        Phone1: "Primary Phone",
+        "Mobile number": "Mobile Number",
+        "Spouse first name": "Spouse First Name",
+        "Spouse last name": "Spouse Last Name",
+        "Child 1 name": "Child 1",
+        "Child 2 name": "Child 2",
+        "Child 3 name": "Child 3",
+        YearSince: "Year Moved to Bay Area",
+        Pattapeyar: "House Name",
+      };
+
+      // Section groupings (same as member page)
+      const basicInfoKeys = ["Email", "City"];
+      const chettinadKeys = [
+        "Chettinad native place",
+        "Vilasam",
+        "spouse birth villasam",
+        "spouse birth vilasam",
+        "Kovil",
+        "Pirivu",
+        "Kovil and Pirivu",
+        "spouse kovil",
+        "spouse native city",
+      ];
+      const contactKeys = ["Phone1", "Mobile number", "Address"];
+      const familyKeys = [
+        "Spouse first name",
+        "Spouse last name",
+        "Child 1 name",
+        "Child 2 name",
+        "Child 3 name",
+      ];
+
+      // Helper: full photo URL builder
       function getPhotoUrl(photoLink) {
         if (!photoLink) return "assets/default-profile.jpeg";
         return `${PHOTO_BASE_URL}${photoLink}`;
       }
 
+      // Escape
+      function escapeHtml(s) {
+        return String(s || "").replace(
+          /[&<>"]/g,
+          (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c])
+        );
+      }
+
+      // Load
       async function loadProfile() {
         profileEl.innerHTML = `<div class="loading">Loading profile…</div>`;
         try {
@@ -364,19 +404,46 @@
         }
       }
 
+      // Render read-only view (same layout as member page)
       function renderProfile(m) {
         const fullname = `${m["First name"] || ""} ${
           m["Last name"] || ""
         }`.trim();
         const photoUrl = getPhotoUrl(m.photo_link);
 
-        // Generate field list dynamically
-        const fieldsHtml = Object.keys(m)
-          .filter((key) => key !== "photo_link" && key !== "_id") // hide internal fields
+        function buildSection(keys, title) {
+          const sectionHtml = keys
+            .filter((key) => key in m && m[key] && !skipFields.has(key))
+            .map(
+              (key) => `
+          <div>
+            <strong>${escapeHtml(prettyNames[key] || key)}</strong>
+            <div>${escapeHtml(m[key] || "N/A")}</div>
+          </div>`
+            )
+            .join("");
+
+          return sectionHtml
+            ? `<div class="profile-section">
+              <h3>${escapeHtml(title)}</h3>
+              <div class="profile-grid">${sectionHtml}</div>
+            </div>`
+            : "";
+        }
+
+        const groupedKeys = new Set([
+          ...basicInfoKeys,
+          ...chettinadKeys,
+          ...contactKeys,
+          ...familyKeys,
+        ]);
+
+        const miscHtml = Object.keys(m)
+          .filter((key) => !skipFields.has(key) && !groupedKeys.has(key))
           .map(
             (key) => `
         <div>
-          <strong>${escapeHtml(key)}</strong>
+          <strong>${escapeHtml(prettyNames[key] || key)}</strong>
           <div>${escapeHtml(m[key] || "N/A")}</div>
         </div>`
           )
@@ -391,8 +458,21 @@
       </div>
     </div>
 
-    <div class="profile-grid">
-      ${fieldsHtml}
+    ${buildSection(basicInfoKeys, "Basic Info")}
+    ${buildSection(chettinadKeys, "Chettinad Info")}
+    ${buildSection(contactKeys, "Contact Info")}
+    ${buildSection(familyKeys, "Family")}
+    ${
+      miscHtml
+        ? `<div class="profile-section">
+            <h3>Other Details</h3>
+            <div class="profile-grid">${miscHtml}</div>
+          </div>`
+        : ""
+    }
+
+    <div class="profile-bottom-photo">
+      <img class="banner-photo" src="${photoUrl}" onerror="this.src='assets/default-profile.jpeg'" />
     </div>
 
     <div class="profile-actions">
@@ -402,23 +482,136 @@
 
         document.getElementById("editBtn").addEventListener("click", () => {
           renderEditForm(m);
-          editSection.style.display = "block";
-          window.scrollTo({ top: editSection.offsetTop, behavior: "smooth" });
+          // scroll to top of edit form
+          window.scrollTo({ top: profileEl.offsetTop, behavior: "smooth" });
         });
       }
 
-      editForm.addEventListener("submit", async (e) => {
-        e.preventDefault();
-        const formData = new FormData(editForm); // Use FormData for file upload
+      // Render edit form for all visible fields except Email (non-editable)
+      function renderEditForm(m) {
+        const photoUrl = getPhotoUrl(m.photo_link || "");
+        // Collect all keys to show (same logic used for read-only)
+        const groupedKeys = new Set([
+          ...basicInfoKeys,
+          ...chettinadKeys,
+          ...contactKeys,
+          ...familyKeys,
+        ]);
 
+        // Build ordered list: basic, chettinad, contact, family, then other keys
+        const allVisibleKeys = [
+          ...basicInfoKeys,
+          ...chettinadKeys,
+          ...contactKeys,
+          ...familyKeys,
+          // then other keys present in m but not skipped / grouped
+          ...Object.keys(m).filter(
+            (k) => !skipFields.has(k) && !groupedKeys.has(k)
+          ),
+        ];
+
+        // Remove duplicates while preserving order
+        const seen = new Set();
+        const orderedKeys = allVisibleKeys.filter((k) => {
+          if (seen.has(k)) return false;
+          seen.add(k);
+          return true;
+        });
+
+        // Build HTML: for Email show read-only text; others show input fields.
+        const fieldsHtml = orderedKeys
+          .filter((k) => k in m && !skipFields.has(k))
+          .map((key) => {
+            if (key === "Email") {
+              return `<div><strong>${escapeHtml(
+                prettyNames[key] || key
+              )}</strong><div>${escapeHtml(m[key] || "N/A")}</div></div>`;
+            }
+            // textarea for long fields (heuristic: if value length > 120 or value contains newline)
+            const val = m[key] || "";
+            const useTextarea =
+              (typeof val === "string" && val.length > 120) ||
+              (typeof val === "string" && val.includes("\n"));
+            const inputName = escapeHtml(key);
+            if (useTextarea) {
+              return `<div>
+                <strong>${escapeHtml(prettyNames[key] || key)}</strong>
+                <textarea class="edit-input" name="${inputName}" rows="4">${escapeHtml(
+                val
+              )}</textarea>
+              </div>`;
+            } else {
+              return `<div>
+                <strong>${escapeHtml(prettyNames[key] || key)}</strong>
+                <input class="edit-input" type="text" name="${inputName}" value="${escapeHtml(
+                val
+              )}" />
+              </div>`;
+            }
+          })
+          .join("");
+
+        // Photo file input (single file controls profile/banner)
+        const photoHtml = `
+          <div>
+            <strong>Profile Photo</strong>
+            <div style="display:flex;gap:12px;align-items:center">
+              <img src="${photoUrl}" class="profile-photo" style="width:72px;height:72px;border-radius:8px" onerror="this.src='assets/default-profile.jpeg'"/>
+              <input type="file" id="photo_file" name="photo_file" accept="image/*" />
+            </div>
+          </div>
+        `;
+
+        profileEl.innerHTML = `
+          <div class="profile-top">
+            <img class="profile-photo" src="${photoUrl}" onerror="this.src='assets/default-profile.jpeg'"/>
+            <div class="profile-meta">
+              <h2>Edit Profile</h2>
+              <div class="muted">${escapeHtml(m.City || "")}</div>
+            </div>
+          </div>
+
+          <form id="editProfileForm">
+            <div class="profile-section">
+              <h3>Profile</h3>
+              <div class="profile-grid">
+                ${photoHtml}
+                ${fieldsHtml}
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <button type="button" id="saveBtn" class="btn">Save Changes</button>
+              <button type="button" id="cancelBtn" class="btn outline">Cancel</button>
+            </div>
+          </form>
+        `;
+
+        document.getElementById("cancelBtn").addEventListener("click", () => {
+          loadProfile();
+        });
+
+        document
+          .getElementById("saveBtn")
+          .addEventListener("click", async () => {
+            await saveProfile(m);
+          });
+      }
+
+      // Save: upload photo (if any) then PUT to backend
+      async function saveProfile(originalMember) {
+        const form = document.getElementById("editProfileForm");
+        const formData = new FormData(form);
+
+        // Make sure we include any text areas/inputs (FormData collects them if inside form).
         try {
-          // If a file is selected, upload to Cloudinary first
-          const fileInput = formData.get("photo_file");
-          if (fileInput && fileInput.size > 0) {
+          // Handle photo upload if selected
+          const fileInput = document.getElementById("photo_file");
+          if (fileInput && fileInput.files && fileInput.files.length > 0) {
+            const file = fileInput.files[0];
             const cloudData = new FormData();
-            cloudData.append("file", fileInput);
-            cloudData.append("upload_preset", "peopleimages"); // Your Cloudinary preset
-
+            cloudData.append("file", file);
+            cloudData.append("upload_preset", "peopleimages");
             const cloudRes = await fetch(
               "https://api.cloudinary.com/v1_1/dp9lcdlgk/image/upload",
               {
@@ -427,93 +620,53 @@
               }
             );
             const cloudJson = await cloudRes.json();
-
             if (cloudJson.secure_url) {
-              // Extract just the filename/path after the last slash
               const photoPath = cloudJson.public_id.split("/").pop();
               formData.set("photo_link", photoPath);
-
-              console.log("Original public_id:", cloudJson.public_id);
-              console.log("Extracted photo_link:", photoPath);
             } else {
               alert("Photo upload failed. Profile not updated.");
               return;
             }
           }
 
-          // Convert FormData to JSON for your backend
-          const plainData = {};
+          // Build plain object; exclude photo_file input and Email (non-editable)
+          const plain = {};
           formData.forEach((v, k) => {
-            if (k !== "photo_file") plainData[k] = v;
+            if (k === "photo_file") return;
+            // Email must not be changed
+            if (k === "Email") return;
+            plain[k] = v;
           });
 
+          // Some fields might be missing: to avoid accidentally removing fields,
+          // we only send keys that are present in plain (i.e. updated). The backend
+          // should merge — if your backend needs full object, you can adjust here.
           const res = await fetch(
             `${BACKEND}/web/members/${encodeURIComponent(userId)}`,
             {
               method: "PUT",
               headers: { "Content-Type": "application/json" },
-              body: JSON.stringify(plainData),
+              body: JSON.stringify(plain),
             }
           );
           const data = await res.json();
 
-          if (data.ok) {
+          if (data && data.ok) {
             alert("Profile updated!");
-            editSection.style.display = "none";
-            renderProfile(data.member); // re-render profile including new photo
+            // If backend returns updated member, use it; else reload from server
+            if (data.member) renderProfile(data.member);
+            else loadProfile();
           } else {
+            console.error("Save failed", data);
             alert("Update failed: " + (data.message || "Unknown error"));
           }
         } catch (err) {
           console.error(err);
-          alert("Update failed.");
+          alert("Error updating profile.");
         }
-      });
-      function renderEditForm(m) {
-        const fieldsHtml = Object.keys(m)
-          .filter((key) => key !== "photo_link" && key !== "_id")
-          .map(
-            (key) => `
-      <label>
-        <span>${escapeHtml(key)}</span>
-        <input type="text" name="${escapeHtml(key)}" value="${escapeHtml(
-              m[key] || ""
-            )}" />
-      </label>`
-          )
-          .join("");
-        const photoHtml = `
-    <label>
-      <span>Profile Photo</span>
-      <input type="file" name="photo_file" accept="image/*" />
-    </label>
-  `;
-
-        editForm.innerHTML = `
-        ${photoHtml}
-    ${fieldsHtml}
-    <div class="form-actions">
-      <button type="submit" class="btn">Save Changes</button>
-      <button type="button" id="cancelEditBtn" class="btn outline">Cancel</button>
-    </div>
-  `;
-
-        // Hook up cancel button after re-render
-        document
-          .getElementById("cancelEditBtn")
-          .addEventListener("click", () => {
-            editSection.style.display = "none";
-          });
       }
 
-      // Simple escape function
-      function escapeHtml(s) {
-        return String(s || "").replace(
-          /[&<>"]/g,
-          (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c])
-        );
-      }
-
+      // init
       loadProfile();
     </script>
   </body>
