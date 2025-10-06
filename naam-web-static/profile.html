@@ -276,15 +276,22 @@
   <body>
     <header class="site-header">
       <div class="container header-inner">
-        <a href="members.html" class="brand"
-          >NAAM <span class="muted">— My Profile</span></a
-        >
+        <a href="members.html" class="brand">
+          NAAM <span class="muted">— My Profile</span>
+        </a>
         <nav class="nav">
           <a href="members.html">Members</a>
           <a href="analytics.html">Analytics</a>
           <a href="profile.html" class="active">Profile</a>
           <a href="browse_by_category.html">By Category</a>
         </nav>
+        <button
+          id="logoutBtn"
+          class="btn outline small"
+          style="margin-left: 16px"
+        >
+          Logout
+        </button>
       </div>
     </header>
 
@@ -334,7 +341,6 @@
         "Palakaram",
         "AdminUpdated",
         "Area",
-        "spouse birth villasam",
       ]);
 
       const prettyNames = {
@@ -358,6 +364,7 @@
       const chettinadKeys = [
         "Chettinad native place",
         "Vilasam",
+        "spouse birth villasam",
         "spouse birth vilasam",
         "Kovil",
         "Pirivu",
@@ -665,6 +672,24 @@
           alert("Error updating profile.");
         }
       }
+      function logout() {
+        localStorage.removeItem("userId");
+        localStorage.removeItem("userEmail");
+        localStorage.removeItem("userName");
+        location.href = "login.html";
+      }
+
+      // Attach logout listener when DOM loads
+      document.addEventListener("DOMContentLoaded", () => {
+        const logoutBtn = document.getElementById("logoutBtn");
+        if (logoutBtn) {
+          logoutBtn.addEventListener("click", () => {
+            if (confirm("Are you sure you want to sign out?")) {
+              logout();
+            }
+          });
+        }
+      });
 
       // init
       loadProfile();
