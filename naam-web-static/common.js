@@ -7,7 +7,7 @@ function isLoggedIn() {
 
 function requireLogin() {
   if (!isLoggedIn()) {
-    alert("Please sign in with Google first.");
+    alert("Please sign in first.");
     window.location.href = "login.html";
   }
 }
@@ -15,11 +15,7 @@ function requireLogin() {
 window.isLoggedIn = isLoggedIn;
 window.requireLogin = requireLogin;
 
-// ✅ Use Cloudinary base URL for member photos
-const PHOTO_BASE_URL =
-  "https://res.cloudinary.com/dp9lcdlgk/image/upload/peopleImages/";
-
-// very small helper functions used in templates
+// small helper functions used in templates
 function escapeHtml(s) {
   return String(s || "").replace(
     /[&<>"]/g,
@@ -27,15 +23,33 @@ function escapeHtml(s) {
   );
 }
 
-// Helper to get full photo URL (handles missing photo_link gracefully)
-function getPhotoUrl(photo_link) {
-  if (!photo_link || photo_link.trim() === "") {
-    return "/assets/default-profile.jpeg"; // fallback placeholder in your project
-  }
-  return `${PHOTO_BASE_URL}${encodeURIComponent(photo_link)}`;
-}
+// ✅ Base URL for member photos on Render disk
+const PHOTO_BASE_URL =
+  "https://namma-ooru-backend-q34n.onrender.com/assets/peopleImages/";
 
-// Expose to global (used in templates)
+// Helper to get full photo URL (handles missing photo_link gracefully)
+function getPhotoUrl(photoLink) {
+  if (!photoLink || photoLink === "") return "/assets/default-profile.jpeg";
+
+  // If it's already a full URL
+  if (photoLink.startsWith("http")) return photoLink;
+
+  let filename = photoLink;
+
+  // Remove /peopleImages/ or peopleImages/ if it's already in the filename
+  filename = filename.replace(/^\/?(peopleImages\/)+/i, "");
+
+  // Normalize .jpeg to .jpg (since server only has .jpg files)
+  filename = filename.replace(/\.jpeg$/i, ".jpg");
+
+  // If it still doesn't have an extension, add .jpg
+  if (!filename.match(/\.(jpg|png|gif)$/i)) {
+    filename += ".jpg";
+  }
+
+  return PHOTO_BASE_URL + filename;
+}
+// Expose to global
 window.escapeHtml = escapeHtml;
 window.getPhotoUrl = getPhotoUrl;
 window.PHOTO_BASE_URL = PHOTO_BASE_URL;

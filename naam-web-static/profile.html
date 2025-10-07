@@ -381,12 +381,6 @@
         "Child 3 name",
       ];
 
-      // Helper: full photo URL builder
-      function getPhotoUrl(photoLink) {
-        if (!photoLink) return "assets/default-profile.jpeg";
-        return `${PHOTO_BASE_URL}${photoLink}`;
-      }
-
       // Escape
       function escapeHtml(s) {
         return String(s || "").replace(
@@ -417,6 +411,7 @@
           m["Last name"] || ""
         }`.trim();
         const photoUrl = getPhotoUrl(m.photo_link);
+        console.log(photoUrl);
 
         function buildSection(keys, title) {
           const sectionHtml = keys

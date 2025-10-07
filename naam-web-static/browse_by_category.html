@@ -245,10 +245,7 @@
               ? `${fullname} & ${spouseName}`
               : fullname;
 
-            const photoUrl = m.photo_link
-              ? `${PHOTO_BASE_URL}${m.photo_link}`
-              : "assets/default-profile.jpeg";
-
+            const photoUrl = getPhotoUrl(m.photo_link);
             // Make the whole card clickable
             return `
         <a href="member.html?id=${encodeURIComponent(

@@ -290,11 +290,6 @@
 
       const profileEl = document.getElementById("profile");
 
-      function getPhotoUrl(photoLink) {
-        if (!photoLink) return "assets/default-profile.jpeg";
-        return `${PHOTO_BASE_URL}${photoLink}`;
-      }
-
       async function loadProfile() {
         profileEl.innerHTML = `<div class="loading">Loading profile…</div>`;
         try {
