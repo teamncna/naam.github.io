@@ -605,25 +605,23 @@
         const form = document.getElementById("editProfileForm");
         const formData = new FormData(form);
 
-        // Make sure we include any text areas/inputs (FormData collects them if inside form).
         try {
           // Handle photo upload if selected
           const fileInput = document.getElementById("photo_file");
           if (fileInput && fileInput.files && fileInput.files.length > 0) {
             const file = fileInput.files[0];
-            const cloudData = new FormData();
-            cloudData.append("file", file);
-            cloudData.append("upload_preset", "peopleimages");
-            const cloudRes = await fetch(
-              "https://api.cloudinary.com/v1_1/dp9lcdlgk/image/upload",
-              {
-                method: "POST",
-                body: cloudData,
-              }
-            );
-            const cloudJson = await cloudRes.json();
-            if (cloudJson.secure_url) {
-              const photoPath = cloudJson.public_id.split("/").pop();
+            const uploadData = new FormData();
+            uploadData.append("files", file);
+
+            const uploadRes = await fetch(`${BACKEND}/upload`, {
+              method: "POST",
+              body: uploadData,
+            });
+
+            const uploadJson = await uploadRes.json();
+            if (uploadJson.files && uploadJson.files.length > 0) {
+              // Extract just the filename from the path (e.g., "/peopleImages/1234567890.jpg" -> "1234567890.jpg")
+              const photoPath = uploadJson.files[0].split("/").pop();
               formData.set("photo_link", photoPath);
             } else {
               alert("Photo upload failed. Profile not updated.");
