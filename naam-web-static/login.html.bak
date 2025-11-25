@@ -51,7 +51,7 @@
             localStorage.setItem("userName", data.name);
             msg.textContent = "Login successful! Redirecting...";
             msg.style.color = "var(--green)";
-            setTimeout(() => (location.href = "members.html"), 500);
+            setTimeout(() => (location.href = "landing.html"), 500);
           } else {
             msg.textContent = data.message || "Login failed.";
             msg.style.color = "var(--danger)";
