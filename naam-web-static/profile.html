@@ -142,6 +142,15 @@
         font-weight: 500;
       }
 
+      .profile-link {
+        color: #4f46e5;
+        text-decoration: none;
+      }
+
+      .profile-link:hover {
+        text-decoration: underline;
+      }
+
       .profile-actions {
         display: flex;
         gap: 12px;
@@ -320,6 +329,14 @@
       // Keep same skipFields & prettyNames as your member page
       const skipFields = new Set([
         "photo_link",
+        "photo_signed_url",
+        "photo signed url",
+        "Photo Signed URL",
+        "photo_storage_path",
+        "photo storage path",
+        "Photo Storage Path",
+        "photoSignedUrl",
+        "photoStoragePath",
         "_id",
         "VerifiedByUser",
         "OnlyNameAndEmailOnline",
@@ -391,6 +408,59 @@
         );
       }
 
+      function renderFieldValue(key, value) {
+        const text = String(value || "").trim();
+        if (!text) return "N/A";
+
+        const lowerKey = String(key || "").toLowerCase();
+        if (lowerKey.includes("email")) {
+          return `<a class="profile-link" href="mailto:${encodeURIComponent(
+            text
+          )}">${escapeHtml(text)}</a>`;
+        }
+
+        if (lowerKey.includes("phone") || lowerKey.includes("mobile")) {
+          const tel = getTelHref(text);
+          if (tel) {
+            return `<a class="profile-link" href="${escapeHtml(
+              tel
+            )}">${escapeHtml(text)}</a>`;
+          }
+        }
+
+        return escapeHtml(text);
+      }
+
+      function getTelHref(value) {
+        const text = String(value || "").trim();
+        const firstNumber = text.split(/[;/,|]/)[0] || text;
+        const hasPlus = firstNumber.trim().startsWith("+");
+        const digits = firstNumber.replace(/\D/g, "");
+        if (digits.length < 7) return "";
+        return `tel:${hasPlus ? "+" : ""}${digits}`;
+      }
+
+      function getFirstValue(member, keys) {
+        for (const key of keys) {
+          if (member[key]) return String(member[key]).trim();
+        }
+        return "";
+      }
+
+      function getMapsUrl(member) {
+        const parts = [
+          getFirstValue(member, ["Address", "Street Address", "Street"]),
+          getFirstValue(member, ["City"]),
+          getFirstValue(member, ["State", "Province"]),
+          getFirstValue(member, ["Zip", "Zip Code", "Zipcode", "Postal Code"]),
+        ].filter(Boolean);
+
+        if (!parts.length) return "";
+        return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+          parts.join(", ")
+        )}`;
+      }
+
       // Load
       async function loadProfile() {
         profileEl.innerHTML = `<div class="loading">Loading profile…</div>`;
@@ -420,7 +490,7 @@
               (key) => `
           <div>
             <strong>${escapeHtml(prettyNames[key] || key)}</strong>
-            <div>${escapeHtml(m[key] || "N/A")}</div>
+            <div>${renderFieldValue(key, m[key])}</div>
           </div>`
             )
             .join("");
@@ -446,10 +516,11 @@
             (key) => `
         <div>
           <strong>${escapeHtml(prettyNames[key] || key)}</strong>
-          <div>${escapeHtml(m[key] || "N/A")}</div>
+          <div>${renderFieldValue(key, m[key])}</div>
         </div>`
           )
           .join("");
+        const mapUrl = getMapsUrl(m);
 
         profileEl.innerHTML = `
     <div class="profile-top">
@@ -478,6 +549,11 @@
     </div>
 
     <div class="profile-actions">
+      ${
+        mapUrl
+          ? `<a class="btn outline" href="${mapUrl}" target="_blank" rel="noopener">Map</a>`
+          : ""
+      }
       <button id="editBtn" class="btn outline">Edit Profile</button>
     </div>
   `;
@@ -527,7 +603,7 @@
             if (key === "Email") {
               return `<div><strong>${escapeHtml(
                 prettyNames[key] || key
-              )}</strong><div>${escapeHtml(m[key] || "N/A")}</div></div>`;
+              )}</strong><div>${renderFieldValue(key, m[key])}</div></div>`;
             }
             // textarea for long fields (heuristic: if value length > 120 or value contains newline)
             const val = m[key] || "";
