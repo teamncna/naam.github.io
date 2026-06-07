@@ -335,6 +335,9 @@
                 id="search"
                 placeholder="Search name, city, native place..."
               />
+              <button id="searchBtn" class="btn subtle" type="button">
+                Search
+              </button>
             </div>
             <select id="limit">
               <option value="10">10 / page</option>
@@ -362,6 +365,7 @@
       const searchInput = document.getElementById("search");
       const listEl = document.getElementById("list");
       const limitEl = document.getElementById("limit");
+      const searchBtn = document.getElementById("searchBtn");
       const prevBtn = document.getElementById("prev");
       const nextBtn = document.getElementById("next");
       const pageInfo = document.getElementById("pageInfo");
@@ -426,9 +430,15 @@
       }
 
       // listeners
-      searchInput.addEventListener("input", () => {
+      searchBtn.addEventListener("click", () => {
         page = 1;
-        debounce(loadMembers, 350)();
+        loadMembers();
+      });
+      searchInput.addEventListener("keydown", (event) => {
+        if (event.key === "Enter") {
+          page = 1;
+          loadMembers();
+        }
       });
       limitEl.addEventListener("change", () => {
         page = 1;
@@ -444,15 +454,6 @@
         page++;
         loadMembers();
       });
-
-      // helpers
-      function debounce(fn, wait = 300) {
-        let t;
-        return () => {
-          clearTimeout(t);
-          t = setTimeout(fn, wait);
-        };
-      }
 
       // simple escape
       function escapeHtml(s) {

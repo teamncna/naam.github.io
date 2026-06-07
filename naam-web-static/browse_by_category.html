@@ -195,6 +195,7 @@
           id="searchInput"
           placeholder="Search by name or email"
         />
+        <button id="searchBtn" class="btn subtle" type="button">Search</button>
       </div>
 
       <div id="membersContainer" class="members-grid">
@@ -211,6 +212,7 @@
       const categorySelect = document.getElementById("categorySelect");
       const subCategorySelect = document.getElementById("subCategorySelect");
       const searchInput = document.getElementById("searchInput");
+      const searchBtn = document.getElementById("searchBtn");
 
       let allMembers = [];
 
@@ -317,35 +319,11 @@
         }
       });
 
-      async function filterMembers() {
-        const cat = categorySelect.value;
-        const sub = subCategorySelect.value;
-        const search = searchInput.value.trim();
-
-        if (!cat || !sub) {
-          renderMembers([]);
-          return;
-        }
-
-        const apiCategory = CATEGORY_MAP[cat];
-        try {
-          const params = new URLSearchParams();
-          params.append("category", apiCategory);
-          params.append("value", sub);
-          if (search) params.append("search", search);
-
-          const res = await apiFetch(`/members/by-category?${params}`);
-          const members = await res.json();
-          renderMembers(members);
-        } catch (err) {
-          console.error("Failed to fetch members by category", err);
-          membersContainer.innerHTML =
-            '<div class="error">Failed to load members</div>';
-        }
-      }
-
       subCategorySelect.addEventListener("change", filterMembers);
-      searchInput.addEventListener("input", filterMembers);
+      searchBtn.addEventListener("click", filterMembers);
+      searchInput.addEventListener("keydown", (event) => {
+        if (event.key === "Enter") filterMembers();
+      });
 
       function filterMembers() {
         const category = categorySelect.value;
