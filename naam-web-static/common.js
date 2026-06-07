@@ -55,7 +55,10 @@ async function apiJson(path, options = {}) {
   const response = await apiFetch(path, options);
   const data = await response.json();
   if (!response.ok) {
-    throw new Error(data?.message || `Supabase API error ${response.status}`);
+    const error = new Error(data?.message || `Supabase API error ${response.status}`);
+    error.status = response.status;
+    error.data = data;
+    throw error;
   }
   return data;
 }

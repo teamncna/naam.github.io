@@ -78,13 +78,18 @@
           } else {
             await supabaseClient.auth.signOut();
             msg.textContent =
-              data.message ||
-              "Your email is not in the authorized member list.";
+              "You are not authorized to access NAAM. Please contact the NCNA admin.";
             msg.style.color = "var(--danger)";
           }
         } catch (err) {
           console.error(err);
-          msg.textContent = "Login verification failed.";
+          if (err.status === 403) {
+            await supabaseClient.auth.signOut();
+            msg.textContent =
+              "You are not authorized to access NAAM. Please contact the NCNA admin.";
+          } else {
+            msg.textContent = "Login verification failed. Please try again.";
+          }
           msg.style.color = "var(--danger)";
         }
       }
