@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>Members — NAAM</title>
     <link rel="icon" type="image/jpeg" href="assets/logo.jpg" />
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.8/dist/umd/supabase.min.js"></script>
     <script src="common.js"></script>
     <script>
       requireLogin();
@@ -358,8 +359,6 @@
     </footer>
 
     <script>
-      const BACKEND = "https://namma-ooru-backend-q34n.onrender.com";
-
       const searchInput = document.getElementById("search");
       const listEl = document.getElementById("list");
       const limitEl = document.getElementById("limit");
@@ -372,10 +371,10 @@
       async function loadMembers() {
         const search = encodeURIComponent(searchInput.value.trim());
         const limit = limitEl.value;
-        const url = `${BACKEND}/members?search=${search}&page=${page}&limit=${limit}`;
+        const url = `/members?search=${search}&page=${page}&limit=${limit}`;
         listEl.innerHTML = `<div class="loading">Loading members…</div>`;
         try {
-          const res = await fetch(url);
+          const res = await apiFetch(url);
           const members = await res.json();
           renderList(members);
           pageInfo.textContent = `Page ${page} • ${members.length} result(s)`;

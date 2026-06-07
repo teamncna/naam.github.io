@@ -180,6 +180,7 @@
       }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.8/dist/umd/supabase.min.js"></script>
     <script src="common.js"></script>
     <script>
       requireLogin();
@@ -240,11 +241,9 @@
     </footer>
 
     <script>
-      const BACKEND = "https://namma-ooru-backend-q34n.onrender.com";
-
       async function loadAnalytics() {
         try {
-          const res = await fetch(BACKEND + "/analytics");
+          const res = await apiFetch("/analytics");
           const data = await res.json();
           drawChart("nativeChart", data.nativeVillage);
           drawChart("cityChart", data.cityResidence);

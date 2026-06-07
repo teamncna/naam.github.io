@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>Categories — NAAM</title>
     <link rel="icon" type="image/jpeg" href="assets/logo.jpg" />
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.8/dist/umd/supabase.min.js"></script>
     <script src="common.js"></script>
     <script>
       requireLogin();
@@ -206,7 +207,6 @@
     </footer>
 
     <script>
-      const BACKEND = "https://namma-ooru-backend-q34n.onrender.com";
       const membersContainer = document.getElementById("membersContainer");
       const categorySelect = document.getElementById("categorySelect");
       const subCategorySelect = document.getElementById("subCategorySelect");
@@ -218,7 +218,7 @@
         membersContainer.innerHTML =
           '<div class="loading">Loading members…</div>';
         try {
-          const res = await fetch(`${BACKEND}/members?limit=1000`);
+          const res = await apiFetch("/members?limit=1000");
           if (!res.ok) throw new Error("Failed to fetch members");
           allMembers = await res.json();
           renderMembers(allMembers);
@@ -248,7 +248,7 @@
               ? `${fullname} & ${spouseName}`
               : fullname;
 
-            const photoUrl = getPhotoUrl(m.photo_link);
+            const photoUrl = getPhotoUrl(m);
             // Make the whole card clickable
             return `
         <a href="member.html?id=${encodeURIComponent(
@@ -293,7 +293,7 @@
         // Fetch unique subcategories from backend
         try {
           const apiCategory = CATEGORY_MAP[selectedCategory];
-          const res = await fetch(`${BACKEND}/stats/${apiCategory}`);
+          const res = await apiFetch(`/stats/${apiCategory}`);
 
           const stats = await res.json();
           const uniqueValues = stats
@@ -329,12 +329,12 @@
 
         const apiCategory = CATEGORY_MAP[cat];
         try {
-          const url = new URL(`${BACKEND}/members/by-category`);
-          url.searchParams.append("category", apiCategory);
-          url.searchParams.append("value", sub);
-          if (search) url.searchParams.append("search", search);
+          const params = new URLSearchParams();
+          params.append("category", apiCategory);
+          params.append("value", sub);
+          if (search) params.append("search", search);
 
-          const res = await fetch(url);
+          const res = await apiFetch(`/members/by-category?${params}`);
           const members = await res.json();
           renderMembers(members);
         } catch (err) {

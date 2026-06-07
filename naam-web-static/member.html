@@ -250,6 +250,7 @@
         margin-top: 8px;
       }
     </style>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.8/dist/umd/supabase.min.js"></script>
     <script src="common.js"></script>
     <script>
       requireLogin();
@@ -283,7 +284,6 @@
     </footer>
 
     <script>
-      const BACKEND = "https://namma-ooru-backend-q34n.onrender.com";
       const params = new URLSearchParams(location.search);
       const id = params.get("id");
       if (!id) {
@@ -296,9 +296,7 @@
       async function loadProfile() {
         profileEl.innerHTML = `<div class="loading">Loading profile…</div>`;
         try {
-          const res = await fetch(
-            `${BACKEND}/members/get/${encodeURIComponent(id)}`
-          );
+          const res = await apiFetch(`/members/get/${encodeURIComponent(id)}`);
           if (!res.ok) throw new Error("Not found");
           const m = await res.json();
           renderProfile(m);
@@ -312,7 +310,7 @@
         const fullname = `${m["First name"] || ""} ${
           m["Last name"] || ""
         }`.trim();
-        const photoUrl = getPhotoUrl(m.photo_link);
+        const photoUrl = getPhotoUrl(m);
 
         const skipFields = new Set([
           "photo_link",

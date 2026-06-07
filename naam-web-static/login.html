@@ -6,7 +6,8 @@
     <title>Login — NAAM</title>
     <link rel="icon" type="image/jpeg" href="assets/logo.jpg" />
     <link rel="stylesheet" href="styles.css" />
-    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.8/dist/umd/supabase.min.js"></script>
+    <script src="common.js"></script>
     <style>
       /* In styles.css or inside your <style> block */
       html,
@@ -33,52 +34,81 @@
           not be allowed in. Please contact an admin to get access.
         </p>
 
-        <!-- Google Sign-In Button -->
-        <div class="google-login">
-          <div
-            id="g_id_onload"
-            data-client_id="677414762046-dnsp2rk6k3bvvhubt0bhimemfrvcei28.apps.googleusercontent.com"
-            data-callback="handleGoogleLogin"
-            data-auto_prompt="true"
-          ></div>
-          <div class="g_id_signin" data-type="standard" data-size="large"></div>
-        </div>
+        <button id="googleLoginBtn" class="btn">Sign in with Google</button>
 
         <p id="loginMsg" class="muted small login-msg"></p>
       </div>
     </main>
 
     <script>
-      const BACKEND = "https://namma-ooru-backend-q34n.onrender.com";
-
-      async function handleGoogleLogin(response) {
+      async function verifySupabaseLogin() {
         const msg = document.getElementById("loginMsg");
         msg.textContent = "Verifying your account...";
         try {
-          const res = await fetch(`${BACKEND}/web/auth/google`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ token: response.credential }),
-          });
-          const data = await res.json();
+          const session = await getSession();
+          if (!session?.access_token) {
+            localStorage.removeItem("userId");
+            localStorage.removeItem("userEmail");
+            localStorage.removeItem("userName");
+            msg.textContent = "";
+            return;
+          }
 
-          if (data.ok) {
-            localStorage.setItem("userId", data.userId);
-            localStorage.setItem("userEmail", data.email);
-            localStorage.setItem("userName", data.name);
+          const data = await apiJson("/check-whitelist", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({}),
+          });
+
+          if (data.isWhitelisted) {
+            const user = session.user;
+            const member = data.member || {};
+            localStorage.setItem("userId", member._id || "");
+            localStorage.setItem("userEmail", user.email || "");
+            localStorage.setItem(
+              "userName",
+              user.user_metadata?.full_name ||
+                `${member["First name"] || ""} ${member["Last name"] || ""}`.trim()
+            );
             msg.textContent = "Login successful! Redirecting...";
             msg.style.color = "var(--green)";
             setTimeout(() => (location.href = "landing.html"), 500);
           } else {
-            msg.textContent = data.message || "Login failed.";
+            await supabaseClient.auth.signOut();
+            msg.textContent =
+              data.message ||
+              "Your email is not in the authorized member list.";
             msg.style.color = "var(--danger)";
           }
         } catch (err) {
           console.error(err);
-          msg.textContent = "Network error logging in.";
+          msg.textContent = "Login verification failed.";
           msg.style.color = "var(--danger)";
         }
       }
+
+      document
+        .getElementById("googleLoginBtn")
+        .addEventListener("click", async () => {
+          const msg = document.getElementById("loginMsg");
+          msg.textContent = "Opening Google sign in...";
+          const { error } = await supabaseClient.auth.signInWithOAuth({
+            provider: "google",
+            options: {
+              redirectTo: window.location.href.split("#")[0].split("?")[0],
+            },
+          });
+
+          if (error) {
+            console.error(error);
+            msg.textContent = "Could not start Google sign in.";
+            msg.style.color = "var(--danger)";
+          }
+        });
+
+      verifySupabaseLogin();
     </script>
   </body>
 </html>
