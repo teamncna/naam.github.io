@@ -17,12 +17,23 @@
         gap: 12px;
         align-items: center;
         flex-wrap: wrap;
+        flex: 1;
+        justify-content: flex-end;
+        min-width: 0;
+      }
+
+      .search-group {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex: 1 1 520px;
+        min-width: 280px;
       }
 
       .search-container {
         position: relative;
         flex: 1;
-        min-width: 250px;
+        min-width: 0;
       }
 
       .search-container::before {
@@ -39,7 +50,8 @@
 
       #search {
         width: 100%;
-        padding: 12px 16px 12px 40px;
+        height: 44px;
+        padding: 0 16px 0 40px;
         font-size: 14px;
         border: 2px solid #e1e5e9;
         border-radius: 8px;
@@ -65,7 +77,8 @@
       }
 
       #limit {
-        padding: 10px 12px;
+        height: 44px;
+        padding: 0 12px;
         font-size: 14px;
         border: 2px solid #e1e5e9;
         border-radius: 6px;
@@ -74,6 +87,13 @@
         cursor: pointer;
         transition: all 0.2s ease;
         outline: none;
+      }
+
+      #searchBtn {
+        height: 44px;
+        padding: 0 18px;
+        white-space: nowrap;
+        flex: 0 0 auto;
       }
 
       #limit:hover {
@@ -294,8 +314,17 @@
           justify-content: stretch;
         }
 
+        .search-group {
+          flex-basis: 100%;
+          min-width: 0;
+        }
+
         .search-container {
           min-width: unset;
+        }
+
+        #limit {
+          width: 100%;
         }
 
         .member-row {
@@ -330,11 +359,13 @@
         <div class="panel-header">
           <h2>Members</h2>
           <div class="controls">
-            <div class="search-container">
-              <input
-                id="search"
-                placeholder="Search name, city, native place..."
-              />
+            <div class="search-group">
+              <div class="search-container">
+                <input
+                  id="search"
+                  placeholder="Search name, city, native place..."
+                />
+              </div>
               <button id="searchBtn" class="btn subtle" type="button">
                 Search
               </button>
