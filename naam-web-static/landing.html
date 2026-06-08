@@ -1,302 +1,313 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Home — NCNA</title>
-    <link rel="icon" type="image/jpeg" href="assets/logo.jpg" />
-    <style>
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-      }
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Home — NCNA</title>
+        <link rel="icon" type="image/jpeg" href="assets/logo.jpg" />
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
 
-      body {
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui,
-          sans-serif;
-        background: #f8fafc;
-        color: #1f2937;
-        line-height: 1.5;
-      }
+            body {
+                font-family:
+                    -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui,
+                    sans-serif;
+                background: #f8fafc;
+                color: #1f2937;
+                line-height: 1.5;
+            }
 
-      .container {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 0 20px;
-      }
+            .container {
+                max-width: 1200px;
+                margin: 0 auto;
+                padding: 0 20px;
+            }
 
-      /* Header */
-      .site-header {
-        background: #ffffff;
-        border-bottom: 1px solid #e5e7eb;
-        padding: 16px 0;
-      }
+            /* Header */
+            .site-header {
+                background: #ffffff;
+                border-bottom: 1px solid #e5e7eb;
+                padding: 16px 0;
+            }
 
-      .header-inner {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-      }
+            .header-inner {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
 
-      .brand {
-        font-size: 24px;
-        font-weight: bold;
-        color: #1f2937;
-        text-decoration: none;
-      }
+            .brand {
+                font-size: 24px;
+                font-weight: bold;
+                color: #1f2937;
+                text-decoration: none;
+            }
 
-      .muted {
-        color: #6b7280;
-        font-weight: normal;
-      }
+            .muted {
+                color: #6b7280;
+                font-weight: normal;
+            }
 
-      .nav {
-        display: flex;
-        gap: 24px;
-      }
+            .nav {
+                display: flex;
+                gap: 24px;
+            }
 
-      .nav a {
-        text-decoration: none;
-        color: #6b7280;
-        font-weight: 500;
-        padding: 8px 0;
-        border-bottom: 2px solid transparent;
-        transition: all 0.2s ease;
-      }
+            .nav a {
+                text-decoration: none;
+                color: #6b7280;
+                font-weight: 500;
+                padding: 8px 0;
+                border-bottom: 2px solid transparent;
+                transition: all 0.2s ease;
+            }
 
-      .nav a:hover,
-      .nav a.active {
-        color: #1f2937;
-        border-bottom-color: #4f46e5;
-      }
+            .nav a:hover,
+            .nav a.active {
+                color: #1f2937;
+                border-bottom-color: #4f46e5;
+            }
 
-      /* Hero Section */
-      .hero {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
-        padding: 80px 20px;
-        text-align: center;
-      }
+            /* Hero Section */
+            .hero {
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: white;
+                padding: 80px 20px;
+                text-align: center;
+            }
 
-      .hero h1 {
-        font-size: 3rem;
-        margin-bottom: 1rem;
-        font-weight: 700;
-      }
+            .hero h1 {
+                font-size: 3rem;
+                margin-bottom: 1rem;
+                font-weight: 700;
+            }
 
-      .hero p {
-        font-size: 1.3rem;
-        margin-bottom: 2rem;
-        opacity: 0.95;
-      }
+            .hero p {
+                font-size: 1.3rem;
+                margin-bottom: 2rem;
+                opacity: 0.95;
+            }
 
-      .cta-button {
-        display: inline-block;
-        background: white;
-        color: #667eea;
-        padding: 12px 32px;
-        border-radius: 8px;
-        text-decoration: none;
-        font-weight: 600;
-        transition: all 0.2s ease;
-        font-size: 16px;
-      }
+            .cta-button {
+                display: inline-block;
+                background: white;
+                color: #667eea;
+                padding: 12px 32px;
+                border-radius: 8px;
+                text-decoration: none;
+                font-weight: 600;
+                transition: all 0.2s ease;
+                font-size: 16px;
+            }
 
-      .cta-button:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-      }
+            .cta-button:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            }
 
-      /* Content Sections */
-      .page-content {
-        padding: 60px 0;
-      }
+            /* Content Sections */
+            .page-content {
+                padding: 60px 0;
+            }
 
-      .section {
-        margin-bottom: 60px;
-      }
+            .section {
+                margin-bottom: 60px;
+            }
 
-      .section-title {
-        font-size: 2rem;
-        margin-bottom: 2rem;
-        color: #1f2937;
-        font-weight: 600;
-      }
+            .section-title {
+                font-size: 2rem;
+                margin-bottom: 2rem;
+                color: #1f2937;
+                font-weight: 600;
+            }
 
-      .panel {
-        background: #ffffff;
-        border-radius: 12px;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-        padding: 32px;
-        margin-bottom: 24px;
-      }
+            .panel {
+                background: #ffffff;
+                border-radius: 12px;
+                box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+                padding: 32px;
+                margin-bottom: 24px;
+            }
 
-      /* Grid Layouts */
-      .grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-        gap: 24px;
-        margin-top: 24px;
-      }
+            /* Grid Layouts */
+            .grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+                gap: 24px;
+                margin-top: 24px;
+            }
 
-      .card {
-        background: #f9fafb;
-        padding: 24px;
-        border-radius: 12px;
-        border: 1px solid #e5e7eb;
-        transition: all 0.2s ease;
-      }
+            .card {
+                background: #f9fafb;
+                padding: 24px;
+                border-radius: 12px;
+                border: 1px solid #e5e7eb;
+                transition: all 0.2s ease;
+            }
 
-      .card:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-      }
+            .card:hover {
+                transform: translateY(-4px);
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            }
 
-      .card-icon {
-        width: 48px;
-        height: 48px;
-        background: #4f46e5;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: white;
-        font-size: 1.5rem;
-        margin-bottom: 16px;
-      }
+            .card-icon {
+                width: 48px;
+                height: 48px;
+                background: #4f46e5;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: white;
+                font-size: 1.5rem;
+                margin-bottom: 16px;
+            }
 
-      .card h3 {
-        font-size: 1.25rem;
-        margin-bottom: 12px;
-        color: #1f2937;
-      }
+            .card h3 {
+                font-size: 1.25rem;
+                margin-bottom: 12px;
+                color: #1f2937;
+            }
 
-      .card p {
-        color: #6b7280;
-        line-height: 1.6;
-      }
+            .card p {
+                color: #6b7280;
+                line-height: 1.6;
+            }
 
-      /* Impact Stats */
-      .stats-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 24px;
-      }
+            /* Impact Stats */
+            .stats-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                gap: 24px;
+            }
 
-      .stat-card {
-        text-align: center;
-        padding: 32px 24px;
-        background: white;
-        border-radius: 12px;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-      }
+            .stat-card {
+                text-align: center;
+                padding: 32px 24px;
+                background: white;
+                border-radius: 12px;
+                box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            }
 
-      .stat-number {
-        font-size: 3rem;
-        font-weight: 700;
-        color: #4f46e5;
-        margin-bottom: 8px;
-      }
+            .stat-number {
+                font-size: 3rem;
+                font-weight: 700;
+                color: #4f46e5;
+                margin-bottom: 8px;
+            }
 
-      .stat-label {
-        font-size: 1rem;
-        color: #6b7280;
-      }
+            .stat-label {
+                font-size: 1rem;
+                color: #6b7280;
+            }
 
-      /* Footer */
-      .site-footer {
-        padding: 32px 0;
-        text-align: center;
-        color: #6b7280;
-        font-size: 14px;
-        border-top: 1px solid #e5e7eb;
-        background: #ffffff;
-      }
+            /* Footer */
+            .site-footer {
+                padding: 32px 0;
+                text-align: center;
+                color: #6b7280;
+                font-size: 14px;
+                border-top: 1px solid #e5e7eb;
+                background: #ffffff;
+            }
 
-      /* Responsive */
-      @media (max-width: 768px) {
-        .hero h1 {
-          font-size: 2rem;
-        }
+            /* Responsive */
+            @media (max-width: 768px) {
+                .hero h1 {
+                    font-size: 2rem;
+                }
 
-        .hero p {
-          font-size: 1.1rem;
-        }
+                .hero p {
+                    font-size: 1.1rem;
+                }
 
-        .nav {
-          gap: 16px;
-          font-size: 0.9rem;
-        }
+                .nav {
+                    gap: 16px;
+                    font-size: 0.9rem;
+                }
 
-        .header-inner {
-          flex-wrap: wrap;
-        }
+                .header-inner {
+                    flex-wrap: wrap;
+                }
 
-        .section-title {
-          font-size: 1.5rem;
-        }
+                .section-title {
+                    font-size: 1.5rem;
+                }
 
-        .stat-number {
-          font-size: 2rem;
-        }
-      }
-    </style>
-  </head>
-  <body>
-    <header class="site-header">
-      <div class="container header-inner">
-        <a href="index.html" class="brand"
-          >NAAM <span class="muted">— Directory</span></a
-        >
-        <nav class="nav">
-          <a href="index.html" class="active">Home</a>
-          <a href="members.html">Members</a>
-          <a href="analytics.html">Analytics</a>
-          <a href="profile.html">Profile</a>
-          <a href="browse_by_category.html">By Category</a>
-        </nav>
-      </div>
-    </header>
+                .stat-number {
+                    font-size: 2rem;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <header class="site-header">
+            <div class="container header-inner">
+                <a href="index.html" class="brand"
+                    >NAAM <span class="muted">— Directory</span></a
+                >
+                <nav class="nav">
+                    <a href="index.html" class="active">Home</a>
+                    <a href="members.html">Members</a>
+                    <a href="analytics.html">Analytics</a>
+                    <a href="profile.html">Profile</a>
+                    <a href="browse_by_category.html">By Category</a>
+                </nav>
+            </div>
+        </header>
 
-    <!-- Hero Section -->
-    <section class="hero">
-      <div class="container">
-        <h1>Nagarathars Association Address Manager</h1>
-        <p>Connecting our community, preserving our heritage</p>
-        <a href="members.html" class="cta-button">Access Directory</a>
-      </div>
-    </section>
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="container">
+                <h1>Nagarathars Association Address Manager</h1>
+                <p>Connecting our community, preserving our heritage</p>
+                <a href="members.html" class="cta-button">Access Directory</a>
+            </div>
+        </section>
 
-    <!-- Main Content -->
-    <main class="container page-content">
-      <!-- About Section -->
-      <section class="section">
-        <h2 class="section-title">About NCNA</h2>
-        <div class="panel">
-          <p
-            style="
-              font-size: 1.1rem;
-              line-height: 1.8;
-              color: #374151;
-              margin-bottom: 16px;
-            "
-          >
-            The Northern California Nagaratharas Association serves as a vital
-            bridge connecting members of our community across the Bay Area and
-            beyond. We are dedicated to preserving our rich cultural heritage
-            while fostering meaningful connections among families.
-          </p>
-          <p style="font-size: 1.1rem; line-height: 1.8; color: #374151">
-            Our directory serves as more than just a regular contact list—it's a
-            testament to our thriving community and a tool for strengthening the
-            bonds that unite us.
-          </p>
-        </div>
-      </section>
+        <!-- Main Content -->
+        <main class="container page-content">
+            <!-- About Section -->
+            <section class="section">
+                <h2 class="section-title">About NAAM</h2>
+                <div class="panel">
+                    <p
+                        style="
+                            font-size: 1.1rem;
+                            line-height: 1.8;
+                            color: #374151;
+                            margin-bottom: 16px;
+                        "
+                    >
+                        NAAM, the Nagarathars Association Address Manager, is a
+                        private community directory built to help verified
+                        members stay connected across Northern California. It
+                        brings member contact details, family information,
+                        native places, kovil details, and current locations into
+                        one secure and easy-to-use place.
+                    </p>
+                    <p
+                        style="
+                            font-size: 1.1rem;
+                            line-height: 1.8;
+                            color: #374151;
+                        "
+                    >
+                        More than just a list of contacts, NAAM is designed as
+                        an address book for the Nagarathar community. Our
+                        directory serves as a testament to our thriving
+                        community and a tool for strengthening the bonds that
+                        unite us all.
+                    </p>
+                </div>
+            </section>
 
-      <!-- Impact Section -->
-      <!-- <section class="section">
+            <!--Impact Section -->
+            <!-- <section class="section">
         <h2 class="section-title">Our Impact</h2>
         <div class="stats-grid">
           <div class="stat-card">
@@ -307,75 +318,81 @@
             <div class="stat-number">25+</div>
             <div class="stat-label">Years of Service</div>
           </div>
-          <div class="stat-card">
-            <div class="stat-number">50+</div>
-            <div class="stat-label">Directory Records</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-number">100%</div>
-            <div class="stat-label">Community Focused</div>
-          </div>
-        </div>
-      </section> -->
+           -->
+            <div class="stat-card">
+                <div class="stat-number">450+</div>
+                <div class="stat-label">Directory Records</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">100%</div>
+                <div class="stat-label">Community Focused</div>
+            </div>
+            <!--</div>
+      </section>-->
 
-      <!-- Features Section -->
-      <section class="section">
-        <h2 class="section-title">Directory Features</h2>
-        <div class="grid">
-          <div class="card">
-            <h3>Comprehensive Directory</h3>
-            <p>
-              Access detailed contact information for NCNA members, such as
-              addresses, phone numbers, and email addresses.
-            </p>
-          </div>
-          <div class="card">
-            <h3>Easy Search</h3>
-            <p>
-              Quickly find members by name, spouse's name, city, or native place
-              with our intuitive search functionality.
-            </p>
-          </div>
-          <div class="card">
-            <h3>Secure & Private</h3>
-            <p>
-              Your information is protected with high quality security measures,
-              accessible only to verified community members. We verify every
-              member for database access, and we are proud to maintain a secure
-              and trusted environment.
-            </p>
-          </div>
-          <div class="card">
-            <h3>Mobile Friendly</h3>
-            <p>
-              Access the directory anytime, anywhere from your smartphone,
-              tablet, or computer. Our multi-platform, responsive design ensures
-              a seamless experience, no matter what you're connecting from.
-            </p>
-          </div>
+            <!-- Features Section -->
+            <section class="section">
+                <h2 class="section-title">Directory Features</h2>
+                <div class="grid">
+                    <div class="card">
+                        <h3>Comprehensive Directory</h3>
+                        <p>
+                            Access detailed contact information for NCNA
+                            members, such as addresses, phone numbers, and email
+                            addresses.
+                        </p>
+                    </div>
+                    <div class="card">
+                        <h3>Easy Search</h3>
+                        <p>
+                            Quickly find members by name, spouse's name, city,
+                            or native place with our intuitive search
+                            functionality.
+                        </p>
+                    </div>
+                    <div class="card">
+                        <h3>Secure & Private</h3>
+                        <p>
+                            Your information is protected with high quality
+                            security measures, accessible only to verified
+                            community members. We verify every member for
+                            database access, and we are proud to maintain a
+                            secure and trusted environment.
+                        </p>
+                    </div>
+                    <div class="card">
+                        <h3>Mobile Friendly</h3>
+                        <p>
+                            Access the directory anytime, anywhere from your
+                            smartphone, tablet, or computer. Our multi-platform,
+                            responsive design ensures a seamless experience, no
+                            matter what you're connecting from.
+                        </p>
+                    </div>
 
-          <div class="card">
-            <h3>Community Building</h3>
-            <p>
-              Foster connections with other fellow Nagarathars across Northern
-              California with tools designed to bring our community together.
-            </p>
-          </div>
-        </div>
-      </section>
-    </main>
+                    <div class="card">
+                        <h3>Community Building</h3>
+                        <p>
+                            Foster connections with other fellow Nagarathars
+                            across Northern California with tools designed to
+                            bring our community together.
+                        </p>
+                    </div>
+                </div>
+            </section>
+        </main>
 
-    <!-- Footer -->
-    <footer class="site-footer">
-      <div class="container">
-        <p>
-          &copy; 2024 Northern California Nagaratharas Association. All rights
-          reserved.
-        </p>
-        <p style="margin-top: 8px; opacity: 0.8">
-          Connecting our community, preserving our heritage
-        </p>
-      </div>
-    </footer>
-  </body>
+        <!-- Footer -->
+        <footer class="site-footer">
+            <div class="container">
+                <p>
+                    &copy; 2024 Northern California Nagaratharas Association.
+                    All rights reserved.
+                </p>
+                <p style="margin-top: 8px; opacity: 0.8">
+                    Connecting our community, preserving our heritage
+                </p>
+            </div>
+        </footer>
+    </body>
 </html>
