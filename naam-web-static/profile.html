@@ -427,6 +427,16 @@
       // "fremont" ended up as separate values). If the typed value truly
       // isn't in the list, an "Add" option lets them create it after an
       // in-site confirmation (not a browser confirm()).
+      // Mirrors the DB cleanup regex: strips a trailing standalone "CA"
+      // (with or without a leading comma) so "Fremont, CA" / "Fremont CA"
+      // normalize to "Fremont" before being compared or saved as new.
+      function normalizeCityName(raw) {
+        return String(raw || "")
+          .trim()
+          .replace(/[,\s]+ca\.?$/i, "")
+          .trim();
+      }
+
       async function initCityCombobox() {
         const wrapper = document.getElementById("cityCombobox");
         if (!wrapper) return;
@@ -446,7 +456,13 @@
         }
 
         function renderOptions() {
-          const query = input.value.trim().toLowerCase();
+          // Strip a trailing "CA"/", CA" before filtering/comparing so typing
+          // "Fremont, CA" when "Fremont" already exists still surfaces the
+          // existing option instead of showing "no matches" (the raw string
+          // "fremont, ca" doesn't substring-match the clean "Fremont" entry) —
+          // this is exactly how the city list fragmented in the first place.
+          const normalizedCandidate = normalizeCityName(input.value);
+          const query = normalizedCandidate.toLowerCase();
           const matches = query
             ? cities.filter((c) => c.toLowerCase().includes(query))
             : cities;
@@ -465,10 +481,10 @@
             )
             .join("");
 
-          if (query && !exactMatch) {
+          if (normalizedCandidate && !exactMatch) {
             html += `<div class="combobox-option add-new" data-add="${escapeHtml(
-              input.value.trim()
-            )}">+ Add "${escapeHtml(input.value.trim())}"</div>`;
+              normalizedCandidate
+            )}">+ Add "${escapeHtml(normalizedCandidate)}"</div>`;
           }
 
           panel.innerHTML =
