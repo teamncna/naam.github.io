@@ -5,308 +5,19 @@
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>My Profile — NAAM</title>
     <link rel="icon" type="image/jpeg" href="assets/logo.jpg" />
-    <style>
-      /* Basic page styles to make it look good */
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-      }
-
-      body {
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui,
-          sans-serif;
-        background: #f8fafc;
-        color: #1f2937;
-        line-height: 1.5;
-      }
-
-      .container {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 0 20px;
-      }
-
-      .site-header {
-        background: #ffffff;
-        border-bottom: 1px solid #e5e7eb;
-        padding: 16px 0;
-      }
-
-      .header-inner {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-      }
-
-      .brand {
-        font-size: 24px;
-        font-weight: bold;
-        color: #1f2937;
-        text-decoration: none;
-      }
-
-      .muted {
-        color: #6b7280;
-        font-weight: normal;
-      }
-
-      .nav {
-        display: flex;
-        gap: 24px;
-      }
-
-      .nav a {
-        text-decoration: none;
-        color: #6b7280;
-        font-weight: 500;
-        padding: 8px 0;
-        border-bottom: 2px solid transparent;
-        transition: all 0.2s ease;
-      }
-
-      .nav a:hover,
-      .nav a.active {
-        color: #1f2937;
-        border-bottom-color: #4f46e5;
-      }
-
-      .page-content {
-        padding: 40px 0;
-      }
-
-      .panel {
-        background: #ffffff;
-        border-radius: 12px;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-        overflow: hidden;
-      }
-
-      .profile-card {
-        background: #ffffff;
-        border-radius: 12px;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-        padding: 24px;
-        margin-bottom: 24px;
-      }
-
-      .profile-top {
-        display: flex;
-        align-items: center;
-        gap: 24px;
-        margin-bottom: 32px;
-        padding-bottom: 24px;
-        border-bottom: 1px solid #e5e7eb;
-      }
-
-      .profile-photo {
-        width: 100px;
-        height: 100px;
-        border-radius: 50%;
-        object-fit: cover;
-        border: 3px solid #e5e7eb;
-      }
-
-      .profile-meta h2 {
-        font-size: 24px;
-        font-weight: 600;
-        color: #1f2937;
-        margin-bottom: 4px;
-      }
-
-      .profile-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-        gap: 20px;
-        margin-bottom: 32px;
-      }
-
-      .profile-grid > div {
-        padding: 16px;
-        background: #f9fafb;
-        border-radius: 8px;
-        border: 1px solid #f3f4f6;
-      }
-
-      .profile-grid strong {
-        display: block;
-        color: #374151;
-        font-weight: 600;
-        margin-bottom: 4px;
-        font-size: 14px;
-        text-transform: capitalize;
-      }
-
-      .profile-grid > div > div {
-        color: #1f2937;
-        font-weight: 500;
-      }
-
-      .profile-link {
-        color: #4f46e5;
-        text-decoration: none;
-      }
-
-      .profile-link:hover {
-        text-decoration: underline;
-      }
-
-      .profile-actions {
-        display: flex;
-        gap: 12px;
-        flex-wrap: wrap;
-      }
-
-      .btn {
-        padding: 12px 20px;
-        border-radius: 8px;
-        font-size: 14px;
-        font-weight: 500;
-        text-decoration: none;
-        cursor: pointer;
-        transition: all 0.2s ease;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        border: none;
-      }
-
-      .btn {
-        background: #4f46e5;
-        color: white;
-      }
-
-      .btn:hover {
-        background: #4338ca;
-        transform: translateY(-1px);
-      }
-
-      .btn.outline {
-        background: transparent;
-        color: #4f46e5;
-        border: 2px solid #4f46e5;
-      }
-
-      .btn.outline:hover {
-        background: #4f46e5;
-        color: white;
-      }
-
-      .loading,
-      .error,
-      .empty {
-        padding: 40px 24px;
-        text-align: center;
-        color: #6b7280;
-      }
-
-      .error {
-        color: #dc2626;
-      }
-
-      .site-footer {
-        padding: 20px 0;
-        text-align: center;
-        color: #6b7280;
-        font-size: 14px;
-      }
-
-      .small {
-        font-size: 14px;
-      }
-
-      /* Responsive design */
-      @media (max-width: 768px) {
-        .profile-top {
-          flex-direction: column;
-          text-align: center;
-        }
-
-        .profile-grid {
-          grid-template-columns: 1fr;
-        }
-
-        .profile-actions {
-          justify-content: center;
-        }
-      }
-      .profile-bottom-photo {
-        margin-top: 40px;
-        width: 100%;
-        overflow: hidden;
-        border-radius: 90px; /* rounded corners */
-      }
-
-      .banner-photo {
-        width: 100%;
-        height: 300px; /* adjust height as needed */
-        object-fit: contain;
-        display: block;
-        border-radius: 90px; /* match parent */
-      }
-      .profile-section {
-        margin-bottom: 40px; /* spacing between sections */
-      }
-
-      .profile-section h3 {
-        font-size: 20px;
-        margin-bottom: 16px;
-        color: #374151;
-        font-weight: 600;
-      }
-
-      .profile-grid {
-        margin-top: 8px;
-      }
-
-      /* form styles for edit mode */
-      .edit-input {
-        padding: 10px;
-        border: 2px solid #e1e5e9;
-        border-radius: 8px;
-        font-size: 14px;
-        width: 100%;
-      }
-
-      .form-actions {
-        grid-column: 1 / -1;
-        display: flex;
-        gap: 12px;
-        justify-content: flex-start;
-        margin-top: 20px;
-        padding-top: 20px;
-        border-top: 1px solid #e5e7eb;
-      }
-    </style>
+    <link rel="stylesheet" href="styles.css" />
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.8/dist/umd/supabase.min.js"></script>
     <script src="common.js"></script>
+    <script src="theme.js"></script>
+    <script src="nav.js"></script>
+    <script src="photo-viewer.js"></script>
+    <script src="ui.js"></script>
     <script>
       requireLogin();
     </script>
   </head>
   <body>
-    <header class="site-header">
-      <div class="container header-inner">
-        <a href="members.html" class="brand">
-          NAAM <span class="muted">— My Profile</span>
-        </a>
-        <nav class="nav">
-          <a href="index.html">Home</a>
-
-          <a href="members.html">Members</a>
-          <a href="analytics.html">Analytics</a>
-          <a href="profile.html" class="active">Profile</a>
-          <a href="browse_by_category.html">By Category</a>
-        </nav>
-        <button
-          id="logoutBtn"
-          class="btn outline small"
-          style="margin-left: 16px"
-        >
-          Logout
-        </button>
-      </div>
-    </header>
+    <div id="app-header"></div>
 
     <main class="container page-content">
       <section id="profile" class="profile-card">
@@ -314,11 +25,12 @@
       </section>
     </main>
 
-    <footer class="site-footer">
-      <div class="container"><small>© NAAM</small></div>
-    </footer>
+    <div id="app-footer"></div>
 
     <script>
+      renderHeader("profile");
+      renderFooter();
+
       const userId = localStorage.getItem("userId");
       if (!userId) {
         location.href = "login.html";
@@ -481,7 +193,6 @@
           m["Last name"] || ""
         }`.trim();
         const photoUrl = getPhotoUrl(m);
-        console.log(photoUrl);
 
         function buildSection(keys, title) {
           const sectionHtml = keys
@@ -545,7 +256,14 @@
     }
 
     <div class="profile-bottom-photo">
-      <img class="banner-photo" src="${photoUrl}" onerror="this.src='assets/default-profile.jpeg'" />
+      <div class="photo-viewer" id="photoViewer">
+        <img class="banner-photo" src="${photoUrl}" onerror="this.src='assets/default-profile.jpeg'" />
+      </div>
+      <div class="photo-viewer-controls">
+        <button type="button" class="btn subtle small" id="photoZoomOut">−</button>
+        <button type="button" class="btn subtle small" id="photoZoomReset">Reset</button>
+        <button type="button" class="btn subtle small" id="photoZoomIn">+</button>
+      </div>
     </div>
 
     <div class="profile-actions">
@@ -557,6 +275,19 @@
       <button id="editBtn" class="btn outline">Edit Profile</button>
     </div>
   `;
+
+        const viewer = initPhotoViewer(document.getElementById("photoViewer"));
+        if (viewer) {
+          document
+            .getElementById("photoZoomIn")
+            .addEventListener("click", viewer.zoomIn);
+          document
+            .getElementById("photoZoomOut")
+            .addEventListener("click", viewer.zoomOut);
+          document
+            .getElementById("photoZoomReset")
+            .addEventListener("click", viewer.reset);
+        }
 
         document.getElementById("editBtn").addEventListener("click", () => {
           renderEditForm(m);
@@ -596,7 +327,8 @@
           return true;
         });
 
-        // Build HTML: for Email show read-only text; others show input fields.
+        // Build HTML: for Email show read-only text; City gets a searchable
+        // combobox (wired up after insertion); others show input fields.
         const fieldsHtml = orderedKeys
           .filter((k) => k in m && !skipFields.has(k))
           .map((key) => {
@@ -604,6 +336,17 @@
               return `<div><strong>${escapeHtml(
                 prettyNames[key] || key
               )}</strong><div>${renderFieldValue(key, m[key])}</div></div>`;
+            }
+            if (key === "City") {
+              return `<div>
+                <strong>${escapeHtml(prettyNames[key] || key)}</strong>
+                <div class="combobox" id="cityCombobox">
+                  <input class="edit-input combobox-input" type="text" id="cityInput" name="City" value="${escapeHtml(
+                    m[key] || ""
+                  )}" autocomplete="off" placeholder="Search for a city…" />
+                  <div class="combobox-panel" id="cityPanel"></div>
+                </div>
+              </div>`;
             }
             // textarea for long fields (heuristic: if value length > 120 or value contains newline)
             const val = m[key] || "";
@@ -674,6 +417,96 @@
           .addEventListener("click", async () => {
             await saveProfile(m);
           });
+
+        initCityCombobox();
+      }
+
+      // Searchable city combobox: fetches distinct cities already in the
+      // database from /stats/city so members pick an existing city instead
+      // of retyping free text (which is how "Fremont" / "Fremont, CA" /
+      // "fremont" ended up as separate values). If the typed value truly
+      // isn't in the list, an "Add" option lets them create it after an
+      // in-site confirmation (not a browser confirm()).
+      async function initCityCombobox() {
+        const wrapper = document.getElementById("cityCombobox");
+        if (!wrapper) return;
+        const input = document.getElementById("cityInput");
+        const panel = document.getElementById("cityPanel");
+
+        let cities = [];
+        try {
+          const res = await apiFetch("/stats/city");
+          const stats = await res.json();
+          cities = stats
+            .map((item) => item._id)
+            .filter(Boolean)
+            .sort((a, b) => a.localeCompare(b));
+        } catch (err) {
+          console.error("Failed to load city list", err);
+        }
+
+        function renderOptions() {
+          const query = input.value.trim().toLowerCase();
+          const matches = query
+            ? cities.filter((c) => c.toLowerCase().includes(query))
+            : cities;
+
+          const exactMatch = cities.some(
+            (c) => c.toLowerCase() === query
+          );
+
+          let html = matches
+            .slice(0, 50)
+            .map(
+              (c) =>
+                `<div class="combobox-option" data-value="${escapeHtml(
+                  c
+                )}">${escapeHtml(c)}</div>`
+            )
+            .join("");
+
+          if (query && !exactMatch) {
+            html += `<div class="combobox-option add-new" data-add="${escapeHtml(
+              input.value.trim()
+            )}">+ Add "${escapeHtml(input.value.trim())}"</div>`;
+          }
+
+          panel.innerHTML =
+            html || `<div class="combobox-option muted">No matches</div>`;
+          panel.classList.add("open");
+        }
+
+        input.addEventListener("focus", renderOptions);
+        input.addEventListener("input", renderOptions);
+
+        panel.addEventListener("click", async (e) => {
+          const option = e.target.closest(".combobox-option");
+          if (!option) return;
+
+          if (option.dataset.add) {
+            const candidate = option.dataset.add;
+            const confirmed = await showConfirmModal(
+              `Are you sure <strong>"${escapeHtml(
+                candidate
+              )}"</strong> isn't already in the list under a different spelling? Only add it if it's really a new city.`,
+              { confirmText: "Yes, add it", cancelText: "Cancel" }
+            );
+            if (confirmed) {
+              input.value = candidate;
+              cities.push(candidate);
+              cities.sort((a, b) => a.localeCompare(b));
+            }
+            panel.classList.remove("open");
+            return;
+          }
+
+          input.value = option.dataset.value;
+          panel.classList.remove("open");
+        });
+
+        document.addEventListener("click", (e) => {
+          if (!wrapper.contains(e.target)) panel.classList.remove("open");
+        });
       }
 
       // Save: upload photo (if any) then PUT to backend
@@ -720,33 +553,25 @@
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(plain),
           });
-          const data = await res.json();
+          const data = await res.json().catch(() => ({}));
 
-          if (data && data.ok) {
+          // Trust the HTTP status, not a `data.ok` flag the backend doesn't
+          // consistently set — it can respond 200 with a success message but
+          // no `ok: true`, which previously showed as a false "update failed".
+          if (res.ok) {
             alert("Profile updated!");
             // If backend returns updated member, use it; else reload from server
-            if (data.member) renderProfile(data.member);
+            if (data && data.member) renderProfile(data.member);
             else loadProfile();
           } else {
             console.error("Save failed", data);
-            alert("Update failed: " + (data.message || "Unknown error"));
+            alert("Update failed: " + (data.message || `Server error (${res.status})`));
           }
         } catch (err) {
           console.error(err);
           alert("Error updating profile.");
         }
       }
-      // Attach logout listener when DOM loads
-      document.addEventListener("DOMContentLoaded", () => {
-        const logoutBtn = document.getElementById("logoutBtn");
-        if (logoutBtn) {
-          logoutBtn.addEventListener("click", () => {
-            if (confirm("Are you sure you want to sign out?")) {
-              signOut();
-            }
-          });
-        }
-      });
 
       // init
       loadProfile();

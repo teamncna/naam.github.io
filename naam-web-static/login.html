@@ -8,33 +8,22 @@
     <link rel="stylesheet" href="styles.css" />
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.8/dist/umd/supabase.min.js"></script>
     <script src="common.js"></script>
-    <style>
-      /* In styles.css or inside your <style> block */
-      html,
-      .login-page {
-        min-height: 100vh; /* ensures it always fills the viewport */
-        display: flex;
-        align-items: center; /* optional, centers content vertically */
-        justify-content: center; /* optional, centers content horizontally */
-        background: linear-gradient(
-            rgba(15, 23, 36, 0.65),
-            rgba(15, 23, 36, 0.65)
-          ),
-          url("assets/bg-image.jpeg") center / cover no-repeat;
-      }
-    </style>
+    <script src="theme.js"></script>
   </head>
-  <body>
-    <main class="container center-content login-page">
-      <div class="hero-card login-card">
+  <body class="login-page">
+    <main class="container center-content">
+      <div class="login-card">
+        <img src="assets/logo.jpg" alt="NAAM" class="logo" />
         <h1 class="hero-title">Welcome to NCNA</h1>
-        <p class="lead hero-lead">Please sign in with Google to continue.</p>
-        <p class="lead hero-lead small-note">
+        <p class="hero-lead">Please sign in with Google to continue.</p>
+        <p class="hero-lead small-note">
           IMPORTANT: If your email is not approved as a NCNA member, you will
           not be allowed in. Please contact an admin to get access.
         </p>
 
-        <button id="googleLoginBtn" class="btn">Sign in with Google</button>
+        <div class="google-login">
+          <button id="googleLoginBtn" class="btn">Sign in with Google</button>
+        </div>
 
         <p id="loginMsg" class="muted small login-msg"></p>
       </div>
@@ -73,7 +62,7 @@
                 `${member["First name"] || ""} ${member["Last name"] || ""}`.trim()
             );
             msg.textContent = "Login successful! Redirecting...";
-            msg.style.color = "var(--green)";
+            msg.style.color = "var(--success)";
             setTimeout(() => (location.href = "landing.html"), 500);
           } else {
             await supabaseClient.auth.signOut();
