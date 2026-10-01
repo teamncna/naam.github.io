@@ -9,13 +9,11 @@
   </head>
   <body>
     <script>
-      // Redirect logic: if logged in -> members.html, else -> login.html
+      // Redirect logic: if logged in -> landing.html, else -> login.html
       const userId = localStorage.getItem("userId");
-      if (userId) {
-        location.href = "naam-web-static/landing.html";
-      } else {
-        location.href = "naam-web-static/login.html";
-      }
+      const base = location.pathname.endsWith("/") ? location.pathname : location.pathname + "/";
+      const target = userId ? "naam-web-static/landing.html" : "naam-web-static/login.html";
+      location.replace(base + target);
     </script>
   </body>
 </html>
