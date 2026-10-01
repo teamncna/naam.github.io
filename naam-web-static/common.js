@@ -1,8 +1,8 @@
 // common.js - shared utilities & constants for all pages
 
-const SUPABASE_URL = "https://wiumkdcqcuzplvlvkuib.supabase.co";
+const SUPABASE_URL = "https://bcbsizvdpriekmsaqurz.supabase.co";
 const SUPABASE_ANON_KEY =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndpdW1rZGNxY3V6cGx2bHZrdWliIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA4MjE1ODAsImV4cCI6MjA5NjM5NzU4MH0.n5ciVetR3wlN8Zgit54qhG9cEX19pVGxjzJ6QT0fn_A";
+  "sb_publishable_cWVzMUllGh-G9-pZ43QstQ_6qFCIow7";
 const SUPABASE_API_URL = `${SUPABASE_URL}/functions/v1/api`;
 
 const supabaseClient = window.supabase.createClient(
