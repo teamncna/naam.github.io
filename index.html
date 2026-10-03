@@ -22,6 +22,22 @@
         height: 100%;
         flex: 1;
       }
+      /* Prevent blue focus outlines on all web inputs and buttons */
+      * {
+        outline: none !important;
+        -webkit-tap-highlight-color: transparent !important;
+      }
+      input, textarea, select, button {
+        outline: none !important;
+        outline-style: none !important;
+        box-shadow: none !important;
+        -webkit-focus-ring-color: transparent !important;
+      }
+      input:focus, textarea:focus, select:focus, button:focus {
+        outline: none !important;
+        outline-style: none !important;
+        box-shadow: none !important;
+      }
     </style>
   <link rel="icon" href="/naam.github.io/favicon.ico" /></head>
 
@@ -32,6 +48,6 @@
     </noscript>
     <!-- The root element for your Expo app. -->
     <div id="root"></div>
-  <script src="/naam.github.io/_expo/static/js/web/index-b24e757d0e1a53d6cb13b85a8a906e24.js" defer></script>
+  <script src="/naam.github.io/_expo/static/js/web/index-99b68a6d5e4647cd90361e2b3b1b68c5.js" defer></script>
 </body>
 </html>
